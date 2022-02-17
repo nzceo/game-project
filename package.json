@@ -1,0 +1,28 @@
+{
+  "name": "game-project",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "dependencies": {
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "create-rpg": "^1.0.5"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@vitejs/plugin-react": "^1.0.0",
+    "autoprefixer": "^10.3.6",
+    "postcss": "^8.3.8",
+    "tailwindcss": "^3.0.22",
+    "typescript": "^4.3.2",
+    "vite": "^2.6.0"
+  }
+}
