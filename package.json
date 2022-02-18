@@ -6,6 +6,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
+    "test": "jest --watch",
     "tsc": "tsc"
   },
   "engines": {
@@ -24,6 +25,12 @@
     "postcss": "^8.3.8",
     "tailwindcss": "^3.0.22",
     "typescript": "^4.3.2",
-    "vite": "^2.6.0"
+    "vite": "^2.6.0",
+    "@types/jest": "^27.4.0",
+    "esbuild-jest": "0.5.0",
+    "mock-local-storage": "1.1.19",
+    "ts-jest": "^27.1.3",
+    "jest": "^27.5.0",
+    "@types/node": "^17.0.17"
   }
 }
