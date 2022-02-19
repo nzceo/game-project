@@ -6,7 +6,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "test": "jest --watch",
+    "test": "jest --watch --no-cache",
     "tsc": "tsc"
   },
   "engines": {

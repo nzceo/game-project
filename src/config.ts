@@ -6,7 +6,7 @@ import archetypes from "./gameData/archetypes";
 import weapons from "./gameData/weapons";
 import armors from "./gameData/armors";
 
-import pregnancy from "./gameData/statuses/pregnancy";
+import fertile from "./gameData/statuses/fertile";
 import Status from "./gameData/statuses";
 
 const { Player, Actor, Character, Map, Quest } = RPG;
@@ -42,7 +42,7 @@ export const config = {
     tinkering: "intelligence",
   },
   statuses: {
-    pregnancy,
+    fertile,
   },
   quests: {},
 

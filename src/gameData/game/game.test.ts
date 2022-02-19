@@ -11,7 +11,7 @@ describe("extended game tests", () => {
     game.load();
     const player = game.player;
 
-    player.addStatus("pregnancy");
+    player.addStatus("fertile");
 
     const mockedEachDay = jest.fn();
 
@@ -27,7 +27,7 @@ describe("extended game tests", () => {
     game.load();
     const player = game.player;
 
-    player.addStatus("pregnancy");
+    player.addStatus("fertile");
 
     const mockedEachDay = jest.fn();
 
