@@ -1,1 +1,1 @@
-export { default, config } from "./useGame";
+export { default } from "./useGame";

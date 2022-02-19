@@ -1,6 +1,4 @@
-import RPG from "create-rpg";
-
-const { Status } = RPG;
+import Status from '../'
 
 class Pregnancy extends Status {
   constructor(game: any, character: any) {

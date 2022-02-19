@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import RPG from "create-rpg";
 import { ITurn } from "create-rpg/dist/core/types";
 import { config } from "../../config";
-
-const { Game } = RPG;
+import Game from '../../gameData/game'
 
 const useGame = () => {
   const [gameCounter, setGameCounter] = useState(0);

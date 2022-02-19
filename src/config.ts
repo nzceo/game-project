@@ -1,10 +1,15 @@
+import RPG from "create-rpg";
 import townMaps from "./gameData/maps/town";
 import levels from "./gameData/levels";
 import stats from "./gameData/stats";
 import archetypes from "./gameData/archetypes";
 import weapons from "./gameData/weapons";
 import armors from "./gameData/armors";
-import pregnancy from './gameData/statuses/pregnancy'
+
+import pregnancy from "./gameData/statuses/pregnancy";
+import Status from "./gameData/statuses";
+
+const { Player, Actor, Character, Map, Quest } = RPG;
 
 export const config = {
   maps: [...townMaps],
@@ -37,7 +42,16 @@ export const config = {
     tinkering: "intelligence",
   },
   statuses: {
-    pregnancy
+    pregnancy,
   },
   quests: {},
+
+  classes: {
+    player: Player,
+    actor: Actor,
+    character: Character,
+    map: Map,
+    quest: Quest,
+    status: Status,
+  },
 };

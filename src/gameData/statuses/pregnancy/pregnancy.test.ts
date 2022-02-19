@@ -4,11 +4,11 @@ import { config } from "../../../config";
 
 const { Game } = RPG;
 
-describe("character class", () => {
+describe("preg tests", () => {
   beforeEach(() => {
     localStorage.setItem("state", ``);
   });
-  it("statuses can be added to character", () => {
+  it("status can be added to character", () => {
     // @ts-ignore
     const game = new Game(config);
     game.load();
