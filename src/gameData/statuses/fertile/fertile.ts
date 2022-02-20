@@ -1,6 +1,6 @@
 import Status from "../";
 import { pMessages } from "./pMessages";
-import { returnPregCalc } from "./pFuncs";
+import { returnPregCalc, returnPregnancyProgressMessages } from "./pFuncs";
 import { fType } from "./fTypes";
 
 class Fertile extends Status {
@@ -44,6 +44,7 @@ class Fertile extends Status {
           fetus: {},
           inches: 0,
           weight: 0,
+          seenAlerts: [],
         },
       };
     }
@@ -51,11 +52,7 @@ class Fertile extends Status {
 
   eachDay() {
     this.progressCycle();
-    if (this.isPregnant()) {
-      this.statusData = {
-        pregnancy: returnPregCalc(this.statusData.pregnancy),
-      };
-    }
+    this.progressPregnancy();
   }
 
   progressCycle() {
@@ -118,6 +115,27 @@ class Fertile extends Status {
         cycleProgress: 5,
         fertility: 20,
       };
+    }
+  }
+
+  progressPregnancy() {
+    if (this.isPregnant()) {
+      this.statusData = {
+        pregnancy: returnPregCalc(this.statusData.pregnancy),
+      };
+      const progressAlerts = returnPregnancyProgressMessages(
+        this.statusData.pregnancy,
+        this.statusData.pregnancy.seenAlerts
+      );
+      this.statusData = {
+        pregnancy: {
+          ...this.statusData.pregnancy,
+          seenAlerts: progressAlerts.filteredAlerts,
+        },
+      };
+      progressAlerts.messages.forEach((alert) => {
+        this.game.extraDisplay.push({ text: alert, type: "flavor" });
+      });
     }
   }
 

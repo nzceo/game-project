@@ -69,13 +69,14 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
 
   if (pregnancy.progressWeeks > 0) {
     pregnancy.inches +=
-      (((((pProgression[pregnancy.progressWeeks].inches -
+      ((((((pProgression[pregnancy.progressWeeks].inches -
         pProgression[pregnancy.progressWeeks - 1].inches) /
         7) *
         days) /
         100) *
         pregnancy.fetus.sizeIncrease) /
-      100;
+        100) *
+      115;
     pregnancy.weight +=
       ((((pProgression[pregnancy.progressWeeks].weight -
         pProgression[pregnancy.progressWeeks - 1].weight) /
@@ -91,8 +92,6 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
       (1 / 294) * days +
       (9 / 294) * days;
   }
-
-  console.log(pregnancy);
 
   return pregnancy;
 }
@@ -173,27 +172,24 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
 //   return armor;
 // }
 
-// export function returnPregnancyMessages(
-//   player: PlayerState["player"],
-//   pregnancy: PregnancyInterface
-// ) {
-//   // const { player } = playerStore.getState();
-//   let messages: any[] = [];
-//   pregnancyMessages.forEach(function (entry) {
-//     if (
-//       entry.pregnancyWaistSizeStart + player?.age?.waistSize! <
-//         parseFloat((player?.age?.waistSize! + pregnancy?.inches!).toFixed(2)) &&
-//       entry.pregnancyWaistSizeEnd + player?.age?.waistSize! >
-//         parseFloat((player?.age?.waistSize! + pregnancy?.inches!).toFixed(2))
-//     ) {
-//       const seenAlerts = playerStore.getState().player?.pregnancy.seenAlerts;
+export function returnPregnancyProgressMessages(
+  pregnancy: PregnancyInterface,
+  seenAlerts: string[]
+) {
+  let messages: any[] = [];
+  let filteredAlerts: any[] = [...seenAlerts];
+  pMessages.forEach(function (entry) {
+    if (
+      entry.waistStart < parseFloat(pregnancy?.inches!.toFixed(2)) &&
+      entry.waistEnd > parseFloat(pregnancy?.inches!.toFixed(2))
+    ) {
+      const isAlreadySeen = seenAlerts?.includes(entry.m);
 
-//       const isAlreadySeen = seenAlerts?.includes(entry.m);
-
-//       if (!isAlreadySeen) {
-//         messages.push(entry.m);
-//       }
-//     }
-//   });
-//   return messages;
-// }
+      if (!isAlreadySeen) {
+        messages.push(entry.m);
+        filteredAlerts.push(entry.m)
+      }
+    }
+  });
+  return {messages, filteredAlerts};
+}

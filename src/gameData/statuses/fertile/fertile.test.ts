@@ -2,6 +2,47 @@ import Fertile from "./";
 import Game from "../../game";
 import { config } from "../../../config";
 
+const pState = {
+  player: {
+    statuses: {
+      fertile: {
+        initialised: true,
+        isPregnant: true,
+        body: {
+          height: 5.4,
+          weightBase: 138,
+          waistBase: 25,
+          weight: 138,
+          waist: 25,
+        },
+        pregnancy: {
+          known: false,
+          progressDays: 0,
+          progressWeeks: 0,
+          publicProgressWeeks: 0,
+          babies: 1,
+          publicBabies: 0,
+          publicFetus: "",
+          fetus: {
+            type: "Human",
+            sizeIncrease: 100,
+            weightIncrease: 100,
+            strength: "normal",
+            movement: "normal",
+            menuText: {
+              single: "a human child",
+              multiple: "human children",
+            },
+          },
+          inches: 0,
+          weight: 0,
+          seenAlerts: [],
+        },
+      },
+    },
+  },
+};
+
 describe("preg tests", () => {
   beforeEach(() => {
     localStorage.setItem("state", ``);
@@ -72,48 +113,7 @@ describe("preg tests", () => {
   });
 
   it("progression works", () => {
-    localStorage.setItem(
-      "state",
-      JSON.stringify({
-        player: {
-          statuses: {
-            fertile: {
-              initialised: true,
-              isPregnant: true,
-              body: {
-                height: 5.4,
-                weightBase: 138,
-                waistBase: 25,
-                weight: 138,
-                waist: 25,
-              },
-              pregnancy: {
-                known: false,
-                progressDays: 0,
-                progressWeeks: 0,
-                publicProgressWeeks: 0,
-                babies: 1,
-                publicBabies: 0,
-                publicFetus: "",
-                fetus: {
-                  type: "Human",
-                  sizeIncrease: 100,
-                  weightIncrease: 100,
-                  strength: "normal",
-                  movement: "normal",
-                  menuText: {
-                    single: "a human child",
-                    multiple: "human children",
-                  },
-                },
-                inches: 0,
-                weight: 0,
-              },
-            },
-          },
-        },
-      })
-    );
+    localStorage.setItem("state", JSON.stringify(pState));
     // @ts-ignore
     const game = new Game(config);
     game.load();
@@ -122,9 +122,34 @@ describe("preg tests", () => {
     player.addStatus("fertile");
 
     expect(player.statuses[0].statusData.isPregnant).toBe(true);
-    
+
     game.sleep(20);
-    
+
     expect(player.statuses[0].statusData.pregnancy.inches).toBeGreaterThan(0);
+  });
+
+  it("progression alerts appear", () => {
+    localStorage.setItem("state", JSON.stringify(pState));
+    // @ts-ignore
+    const game = new Game(config);
+    game.load();
+    const player = game.player;
+
+    player.addStatus("fertile");
+
+    expect(player.statuses[0].statusData.isPregnant).toBe(true);
+
+    game.sleep(100);
+
+    expect(game.turn().display).toStrictEqual(
+      expect.arrayContaining([
+        { text: "Your period seems to be late.", type: "flavor" },
+        { text: "You're feeling nauseous.", type: "flavor" },
+        {
+          text: "You seem to be gaining some weight, you have a slight pot belly. You decide not to pay too much attention to it.",
+          type: "flavor",
+        },
+      ])
+    );
   });
 });
