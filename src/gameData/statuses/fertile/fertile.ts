@@ -1,4 +1,7 @@
 import Status from "../";
+import { pMessages } from "./pMessages";
+import { returnPregCalc } from "./pFuncs";
+import { fType } from "./fTypes";
 
 class Fertile extends Status {
   constructor(game: any, character: any) {
@@ -23,12 +26,36 @@ class Fertile extends Status {
         cycleProgress: 5,
         // out of 100
         fertility: 20,
+        body: {
+          height: 5.4,
+          weightBase: 138,
+          waistBase: 25,
+          weight: 138,
+          waist: 25,
+        },
+        pregnancy: {
+          known: false,
+          progressDays: 0,
+          progressWeeks: 0,
+          publicProgressWeeks: 0,
+          babies: 0,
+          publicBabies: 0,
+          publicFetus: "",
+          fetus: {},
+          inches: 0,
+          weight: 0,
+        },
       };
     }
   }
 
   eachDay() {
     this.progressCycle();
+    if (this.isPregnant()) {
+      this.statusData = {
+        pregnancy: returnPregCalc(this.statusData.pregnancy),
+      };
+    }
   }
 
   progressCycle() {
@@ -86,7 +113,16 @@ class Fertile extends Status {
 
         this.progressCycle();
       }
+    } else {
+      this.statusData = {
+        cycleProgress: 5,
+        fertility: 20,
+      };
     }
+  }
+
+  isPregnant() {
+    return this.statusData.isPregnant;
   }
 }
 
