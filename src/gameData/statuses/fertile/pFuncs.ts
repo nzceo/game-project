@@ -1,6 +1,8 @@
 import { pProgression } from "./pProgression";
 import { pMessages } from "./pMessages";
 import { FType } from "./fTypes";
+import Game from "../../game";
+import { isFunction } from "lodash";
 
 function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
   if (weeks < 12) {
@@ -173,6 +175,7 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
 // }
 
 export function returnPregnancyProgressMessages(
+  game: Game,
   pregnancy: PregnancyInterface,
   seenAlerts: string[]
 ) {
@@ -183,13 +186,21 @@ export function returnPregnancyProgressMessages(
       entry.waistStart < parseFloat(pregnancy?.inches!.toFixed(2)) &&
       entry.waistEnd > parseFloat(pregnancy?.inches!.toFixed(2))
     ) {
-      const isAlreadySeen = seenAlerts?.includes(entry.m);
+      let message;
+
+      if (isFunction(entry.m)) {
+        message = entry.m(game);
+      } else {
+        message = entry.m;
+      }
+
+      const isAlreadySeen = seenAlerts?.includes(message);
 
       if (!isAlreadySeen) {
-        messages.push(entry.m);
-        filteredAlerts.push(entry.m)
+        messages.push(message);
+        filteredAlerts.push(message);
       }
     }
   });
-  return {messages, filteredAlerts};
+  return { messages, filteredAlerts };
 }

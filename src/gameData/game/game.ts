@@ -1,9 +1,16 @@
 import RPG from "create-rpg";
+import Player from '../player'
 
 const { Game } = RPG;
 
 class ExtendedGame extends Game {
   day: number = 0;
+  
+  declare playerData?: Player;
+
+  get player(): Player {
+    return this.playerData!;
+  }
 
   sleep(days: number = 1) {
     for (let i = 0; i < days; i++) {
@@ -14,6 +21,11 @@ class ExtendedGame extends Game {
       });
     }
   }
+
+  init() {
+    this.playerData = new Player(this);
+  }
+
 }
 
 export default ExtendedGame;

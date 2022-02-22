@@ -5,11 +5,11 @@ import stats from "./gameData/stats";
 import archetypes from "./gameData/archetypes";
 import weapons from "./gameData/weapons";
 import armors from "./gameData/armors";
-
+import player from "./gameData/player";
 import fertile from "./gameData/statuses/fertile";
 import Status from "./gameData/statuses";
 
-const { Player, Actor, Character, Map, Quest } = RPG;
+const { Actor, Character, Map, Quest } = RPG;
 
 export const config = {
   maps: [...townMaps],
@@ -26,7 +26,7 @@ export const config = {
       current: 0,
     },
     levelData: levels,
-    combat: stats.strong,
+    combat: stats.weak,
     description: archetypes.player,
   },
   governingStats: {
@@ -47,7 +47,7 @@ export const config = {
   quests: {},
 
   classes: {
-    player: Player,
+    player,
     actor: Actor,
     character: Character,
     map: Map,

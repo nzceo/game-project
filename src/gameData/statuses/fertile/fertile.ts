@@ -2,6 +2,7 @@ import Status from "../";
 import { pMessages } from "./pMessages";
 import { returnPregCalc, returnPregnancyProgressMessages } from "./pFuncs";
 import { fType } from "./fTypes";
+import Game from "../../game";
 
 class Fertile extends Status {
   constructor(game: any, character: any) {
@@ -33,6 +34,8 @@ class Fertile extends Status {
           weight: 138,
           waist: 25,
         },
+        pregnancies: 0,
+        births: 0,
         pregnancy: {
           known: false,
           progressDays: 0,
@@ -124,6 +127,7 @@ class Fertile extends Status {
         pregnancy: returnPregCalc(this.statusData.pregnancy),
       };
       const progressAlerts = returnPregnancyProgressMessages(
+        this.game as Game,
         this.statusData.pregnancy,
         this.statusData.pregnancy.seenAlerts
       );
@@ -141,6 +145,10 @@ class Fertile extends Status {
 
   isPregnant() {
     return this.statusData.isPregnant;
+  }
+  
+  isFirstPregnancy() {
+    return this.statusData.pregnancies === 0;
   }
 }
 

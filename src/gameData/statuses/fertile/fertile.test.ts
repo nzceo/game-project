@@ -1,6 +1,7 @@
 import Fertile from "./";
 import Game from "../../game";
 import { config } from "../../../config";
+import { cloneDeep } from "lodash";
 
 const pState = {
   player: {
@@ -15,6 +16,8 @@ const pState = {
           weight: 138,
           waist: 25,
         },
+        pregnancies: 0,
+        births: 0,
         pregnancy: {
           known: false,
           progressDays: 0,
@@ -147,6 +150,28 @@ describe("preg tests", () => {
         { text: "You're feeling nauseous.", type: "flavor" },
         {
           text: "You seem to be gaining some weight, you have a slight pot belly. You decide not to pay too much attention to it.",
+          type: "flavor",
+        },
+      ])
+    );
+  });
+  it("different progression alert depending on state", () => {
+    const tempPState = cloneDeep(pState);
+    tempPState.player.statuses.fertile.pregnancies = 1;
+    localStorage.setItem("state", JSON.stringify(tempPState));
+    // @ts-ignore
+    const game = new Game(config);
+    game.load();
+    const player = game.player;
+
+    expect(player.statuses[0].statusData.isPregnant).toBe(true);
+
+    game.sleep(100);
+
+    expect(game.turn().display).toStrictEqual(
+      expect.arrayContaining([
+        {
+          text: "You still haven't gotten your period and your stomach is starting to swell outwards. You know from experience you're probably pregnant again.",
           type: "flavor",
         },
       ])
