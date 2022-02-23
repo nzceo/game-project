@@ -1,4 +1,5 @@
 import Game from "../../game";
+import { calculateAverageSize } from "./pFuncs";
 
 export const pMessages = [
   {
@@ -11,35 +12,56 @@ export const pMessages = [
     waistStart: 1,
     waistEnd: 3,
   },
+  // Around 10 weeks, 29 inches with human
   {
     m: (game: Game) => {
       if (game.player.fertility.isFirstPregnancy()) {
         return "You seem to be gaining some weight, you have a slight pot belly. You decide not to pay too much attention to it.";
       } else {
-        return "You still haven't gotten your period and your stomach is starting to swell outwards. You know from experience you're probably pregnant again."
+        return "You still haven't gotten your period and your stomach is starting to swell outwards. You know from experience you're probably pregnant again.";
       }
     },
     waistStart: 4,
     waistEnd: 8,
   },
-  // Around 14 weeks, 33 inches with human
+  // Around 15 weeks, 33 inches with human
   {
     m: "Your waist has been thickening for a few weeks now. Despite what you've been trying to convince yourself of, there's no denying it anymore, you're pregnant. What are you going to do now?",
-    waistStart: 8,
-    waistEnd: 12,
+    waistStart: 7,
+    waistEnd: 11,
     dontActivate: true,
   },
-  // Around 21 weeks, 37 inches with human
+  // Around 25 weeks, 37 inches with human
   {
-    m: "Your pregnant belly is even bigger than before and sticks out from your body by about 5 inches, it's pretty clear to anyone that looks at you that you're expecting.",
-    waistStart: 12,
-    waistEnd: 17,
+    m: (game: Game) => {
+      const size = calculateAverageSize(
+        game.player.fertility.statusData.pregnancy.progressDays,
+        game.player.fertility.statusData.pregnancy.inches
+      );
+      if (size === "large" || size === "veryLarge") {
+        if (
+          game.player.fertility.isMultiples() &&
+          !game.player.fertility.isKnownMultiples()
+        ) {
+          return "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. You're not completely sure but you think you can feel more movement than a single baby should be capable of.";
+        }
+        return "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. Maybe you should go see a doctor.";
+      }
+      return "Your pregnant belly is even bigger than before and sticks out from your body by quite a bit, it's pretty clear to anyone that looks at you that you're expecting.";
+    },
+    waistStart: 11,
+    waistEnd: 16,
   },
   // Around 28 weeks, 42 inches with human
   {
-    m: "Your pregnant belly is now big enough to become a nuisance, it's become quite heavy and it's starting to get difficult to lug it around everywhere you go. It almost reaches 7 inches in front of you.",
-    waistStart: 17,
-    waistEnd: 20,
+    m: (game: Game) => {
+      if (game.player.fertility.isMultiples()) {
+        return "Your stomach is now big enough to be a nuisance during your daily activities. Your womb's weight and size make it difficult to get up when you're sitting and slow down your movements considerably. As you wake up, you feel kicks at opposite sides of your belly, you gasp as you realise there's more than one baby inside you.";
+      }
+      return "Your stomach is now big enough to be a nuisance during your daily activities. Your womb's weight and size make it difficult to get up when you're sitting and slow down your movements considerably, movements from within have also started increasing in frequency it's hard to go a day without feeling a kick or a punch.";
+    },
+    waistStart: 16,
+    waistEnd: 19,
   },
   {
     m: "A dark line that goes from your pubic area and your belly button seems to have appeared, it divides your pregnant belly in two perfectly.",
@@ -53,15 +75,20 @@ export const pMessages = [
   },
   // Around 34 weeks, 45 inches with human
   {
-    m: "Your belly is huge, you are surprised that it could've grown so much in such a short amount of time. Your baby is getting heavier and heavier by the day and you are really starting to wish you could get this whole thing over with.",
-    waistStart: 20,
-    waistEnd: 22,
+    m: (game: Game) => {
+      if (game.player.fertility.isMultiples()) {
+        return "Your belly is huge, you are surprised that it could've grown so much in such a short amount of time. The babies are getting heavier and heavier by the day and you are really starting to wish you could get this whole thing over with, but you know you're probably not even close to getting them out of you. As you cup your swelling stomach, it's hard to imagine how much further these babies will stretch you before they're ready to come out.";
+      }
+      return "Your belly is huge, you are surprised that it could've grown so much in such a short amount of time. Your baby is getting heavier and heavier by the day and you are really starting to wish you could get this whole thing over with.";
+    },
+    waistStart: 19,
+    waistEnd: 21,
   },
   // Around 40 weeks, 48 inches with human
   {
-    m: "Your belly is so big it's getting really hard for you to actually go about your day. The baby is incredibly active and spends most of his time awake kicking you. Your belly sticks out 10 inches in front of you making you look pretty much full-term, you can't imagine your pregnancy lasting that much longer.",
-    waistStart: 22,
-    waistEnd: 24,
+    m:  "Your belly is so big it's getting really hard for you to actually go about your day. The baby is incredibly active and spends most of his time awake kicking you. Your belly sticks out 10 inches in front of you making you look pretty much full-term, you can't imagine your pregnancy lasting that much longer.",
+    waistStart: 21,
+    waistEnd: 23,
   },
   // Around 31 weeks, 50 inches with orc
   {
@@ -83,62 +110,62 @@ export const pMessages = [
   },
 
   // Dexterity penalties
-  {
-    m: "With your belly growing bigger by the day you find yourself having a harder time moving around. It's not a huge problem for now, but you wonder how worse it will get the more your womb expands. You get a Dexterity penalty until you have the baby.",
-    waistStart: 9,
-    waistEnd: 14,
-    statPenalty: "size",
-  },
-  {
-    m: "Your belly is now a major nuisance for you, because of its size you find yourself having a much harder time moving around than a few months ago.  You get a Dexterity penalty until you have the baby.",
-    waistStart: 14,
-    waistEnd: 26,
-    statPenalty: "size",
-  },
-  {
-    m: "Honestly, with the size your womb has reached you should not be doing anything at all that involves being quick and agile. Your gravid womb is constantly in the way, it not only slows you down, but it also throws off your balance since it sticks out so far in front of you. You get a Dexterity penalty until you have the baby.",
-    waistStart: 26,
-    waistEnd: 999,
-    statPenalty: "size",
-  },
+  //   {
+  //     m: "With your belly growing bigger by the day you find yourself having a harder time moving around. It's not a huge problem for now, but you wonder how worse it will get the more your womb expands. You get a Dexterity penalty until you have the baby.",
+  //     waistStart: 9,
+  //     waistEnd: 14,
+  //     statPenalty: "size",
+  //   },
+  //   {
+  //     m: "Your belly is now a major nuisance for you, because of its size you find yourself having a much harder time moving around than a few months ago.  You get a Dexterity penalty until you have the baby.",
+  //     waistStart: 14,
+  //     waistEnd: 26,
+  //     statPenalty: "size",
+  //   },
+  //   {
+  //     m: "Honestly, with the size your womb has reached you should not be doing anything at all that involves being quick and agile. Your gravid womb is constantly in the way, it not only slows you down, but it also throws off your balance since it sticks out so far in front of you. You get a Dexterity penalty until you have the baby.",
+  //     waistStart: 26,
+  //     waistEnd: 999,
+  //     statPenalty: "size",
+  //   },
 
-  // Constitution buffs
-  {
-    m: "Thanks to your advancing condition, your body has started to fatten up in all the right places. Not only you find yourself to have become more curvy, but the extra layer of protection on your bones does wonders for your defense. You get a Constitution bonus until the baby is born.",
-    waistStart: 9,
-    waistEnd: 14,
-    statPenalty: "weight",
-  },
-  {
-    m: "To help protect your developing baby, your body is now covered by a layer of fat that you didn't have before getting pregnant. While some extra protection is nice, you can't help but be a bit angry that the baby has completely taken over your body, leaving you almost no control over these changes. You get a Constitution bonus until the baby is born.",
-    waistStart: 14,
-    waistEnd: 26,
-    statPenalty: "weight",
-  },
-  {
-    m: "Your once taut body is now covered by a thick layer of protective pregnancy fat. Luckily for you the fat you've been gaining is barely noticeable thanks to the gargantuan size your belly has grown to. You get a Constitution bonus until the baby is born.",
-    waistStart: 26,
-    waistEnd: 999,
-    statPenalty: "weight",
-  },
+  //   // Constitution buffs
+  //   {
+  //     m: "Thanks to your advancing condition, your body has started to fatten up in all the right places. Not only you find yourself to have become more curvy, but the extra layer of protection on your bones does wonders for your defense. You get a Constitution bonus until the baby is born.",
+  //     waistStart: 9,
+  //     waistEnd: 14,
+  //     statPenalty: "weight",
+  //   },
+  //   {
+  //     m: "To help protect your developing baby, your body is now covered by a layer of fat that you didn't have before getting pregnant. While some extra protection is nice, you can't help but be a bit angry that the baby has completely taken over your body, leaving you almost no control over these changes. You get a Constitution bonus until the baby is born.",
+  //     waistStart: 14,
+  //     waistEnd: 26,
+  //     statPenalty: "weight",
+  //   },
+  //   {
+  //     m: "Your once taut body is now covered by a thick layer of protective pregnancy fat. Luckily for you the fat you've been gaining is barely noticeable thanks to the gargantuan size your belly has grown to. You get a Constitution bonus until the baby is born.",
+  //     waistStart: 26,
+  //     waistEnd: 999,
+  //     statPenalty: "weight",
+  //   },
 
-  // Strength buffs
-  {
-    m: "Either because of developing motherly instincts or because your body is getting used to move more weight than usual, your muscles have become stronger. You get a Strength bonus until the baby is born.",
-    waistStart: 9,
-    waistEnd: 14,
-    statPenalty: "weight",
-  },
-  {
-    m: "Thanks to all the pregnancy weight you've been stacking on and because of the pregnancy hormones subconsciously telling you to protect your baby, you find yourself becoming stronger. You get a Strength bonus until the baby is born.",
-    waistStart: 14,
-    waistEnd: 26,
-    statPenalty: "weight",
-  },
-  {
-    m: "Sure, you might feel bad about just how bloated your body feels, especially your stomach, but you have to admit to yourself that the fat brought on by the pregnancy has definitely made you more resistant. You get a Constitution bonus until the baby is born.",
-    waistStart: 26,
-    waistEnd: 999,
-    statPenalty: "weight",
-  },
+  //   // Strength buffs
+  //   {
+  //     m: "Either because of developing motherly instincts or because your body is getting used to move more weight than usual, your muscles have become stronger. You get a Strength bonus until the baby is born.",
+  //     waistStart: 9,
+  //     waistEnd: 14,
+  //     statPenalty: "weight",
+  //   },
+  //   {
+  //     m: "Thanks to all the pregnancy weight you've been stacking on and because of the pregnancy hormones subconsciously telling you to protect your baby, you find yourself becoming stronger. You get a Strength bonus until the baby is born.",
+  //     waistStart: 14,
+  //     waistEnd: 26,
+  //     statPenalty: "weight",
+  //   },
+  //   {
+  //     m: "Sure, you might feel bad about just how bloated your body feels, especially your stomach, but you have to admit to yourself that the fat brought on by the pregnancy has definitely made you more resistant. You get a Constitution bonus until the baby is born.",
+  //     waistStart: 26,
+  //     waistEnd: 999,
+  //     statPenalty: "weight",
+  //   },
 ];

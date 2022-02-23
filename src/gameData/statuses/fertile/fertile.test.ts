@@ -2,6 +2,7 @@ import Fertile from "./";
 import Game from "../../game";
 import { config } from "../../../config";
 import { cloneDeep } from "lodash";
+import {fType} from './fTypes'
 
 const pState = {
   player: {
@@ -155,7 +156,7 @@ describe("preg tests", () => {
       ])
     );
   });
-  it("different progression alert depending on state", () => {
+  it("different progression alert depending on being pregnant before", () => {
     const tempPState = cloneDeep(pState);
     tempPState.player.statuses.fertile.pregnancies = 1;
     localStorage.setItem("state", JSON.stringify(tempPState));
@@ -177,4 +178,63 @@ describe("preg tests", () => {
       ])
     );
   });
+  it("different progression alert if child is larger", () => {
+    const tempPState = cloneDeep(pState);
+    tempPState.player.statuses.fertile.pregnancy.fetus = fType.orc;
+    tempPState.player.statuses.fertile.pregnancy.babies = 1;
+    localStorage.setItem("state", JSON.stringify(tempPState));
+    // @ts-ignore
+    const game = new Game(config);
+    game.load();
+    const player = game.player;
+
+    expect(player.statuses[0].statusData.isPregnant).toBe(true);
+
+    game.sleep(155);
+
+    expect(game.turn().display).toStrictEqual(
+      expect.arrayContaining([
+        {
+          text: "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. Maybe you should go see a doctor.",
+          type: "flavor",
+        },
+      ])
+    );
+  });
+  it("different progression alert if child is larger and multiples", () => {
+    const tempPState = cloneDeep(pState);
+    tempPState.player.statuses.fertile.pregnancy.fetus = fType.orc;
+    tempPState.player.statuses.fertile.pregnancy.babies = 2;
+    localStorage.setItem("state", JSON.stringify(tempPState));
+    // @ts-ignore
+    const game = new Game(config);
+    game.load();
+    const player = game.player;
+
+    expect(player.statuses[0].statusData.isPregnant).toBe(true);
+
+    game.sleep(155);
+
+    expect(game.turn().display).toStrictEqual(
+      expect.arrayContaining([
+        {
+          text: "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. You're not completely sure but you think you can feel more movement than a single baby should be capable of.",
+          type: "flavor",
+        },
+      ])
+    );
+  });
+//   it.only("test", () => {
+//     const tempPState = cloneDeep(pState);
+//     tempPState.player.statuses.fertile.pregnancy.fetus = fType.orc;
+//     tempPState.player.statuses.fertile.pregnancy.babies = 2;
+//     localStorage.setItem("state", JSON.stringify(tempPState));
+//     // @ts-ignore
+//     const game = new Game(config);
+//     game.load();
+//     const player = game.player;
+
+
+//     game.sleep(260);
+//   });
 });

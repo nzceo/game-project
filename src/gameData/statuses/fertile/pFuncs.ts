@@ -16,7 +16,7 @@ function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
   }
 }
 
-function calculateAverageSize(
+export function calculateAverageSize(
   progressDays: number,
   currentInches: number
 ): string {
@@ -44,9 +44,9 @@ function calculateAverageSize(
     sizeResult = "average";
   }
 
-  console.log(
-    `Average size for ${currentDay} days is ${averageSize} inches. You are ${currentInches}, which classes you as ${sizeResult}`
-  );
+  // console.log(
+  //   `Average size for ${currentDay} days is ${averageSize} inches. You are ${currentInches}, which classes you as ${sizeResult}`
+  // );
 
   return sizeResult;
 }
@@ -71,14 +71,14 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
 
   if (pregnancy.progressWeeks > 0) {
     pregnancy.inches +=
-      ((((((pProgression[pregnancy.progressWeeks].inches -
+      ((((pProgression[pregnancy.progressWeeks].inches -
         pProgression[pregnancy.progressWeeks - 1].inches) /
         7) *
         days) /
         100) *
-        pregnancy.fetus.sizeIncrease) /
-        100) *
-      115;
+      (pregnancy.fetus.sizeIncrease *
+        pregnancy.babies *
+        (pregnancy.babies > 1 ? pregnancy.fetus.multiplesRate : 1));
     pregnancy.weight +=
       ((((pProgression[pregnancy.progressWeeks].weight -
         pProgression[pregnancy.progressWeeks - 1].weight) /

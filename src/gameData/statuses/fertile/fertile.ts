@@ -140,15 +140,35 @@ class Fertile extends Status {
       progressAlerts.messages.forEach((alert) => {
         this.game.extraDisplay.push({ text: alert, type: "flavor" });
       });
+      console.log(`at ${this.statusData.pregnancy.progressDays} your belly is ${this.statusData.pregnancy.inches + this.statusData.body.waist }(+${this.statusData.pregnancy.inches})`)
+      // console.log(`at ${this.statusData.pregnancy.progressDays} your weight is ${this.statusData.pregnancy.weight + this.statusData.body.weight }(+${this.statusData.pregnancy.weight})`)
     }
   }
 
   isPregnant() {
     return this.statusData.isPregnant;
   }
-  
+
   isFirstPregnancy() {
     return this.statusData.pregnancies === 0;
+  }
+
+  get fetusType() {
+    return this.statusData.pregnancy.fetus.type;
+  }
+
+  /**
+   * Returns true if pregnant with 2 or more babies
+   */
+  isMultiples() {
+    return this.statusData.pregnancy.babies > 1;
+  }
+
+  /**
+   * Returns true if character knows they're pregnant with 2 or more babies
+   */
+  isKnownMultiples() {
+    return this.statusData.pregnancy.publicBabies > 1;
   }
 }
 
