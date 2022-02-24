@@ -224,17 +224,17 @@ describe("preg tests", () => {
       ])
     );
   });
-//   it.only("test", () => {
-//     const tempPState = cloneDeep(pState);
-//     tempPState.player.statuses.fertile.pregnancy.fetus = fType.orc;
-//     tempPState.player.statuses.fertile.pregnancy.babies = 2;
-//     localStorage.setItem("state", JSON.stringify(tempPState));
-//     // @ts-ignore
-//     const game = new Game(config);
-//     game.load();
-//     const player = game.player;
+  it.only("test", () => {
+    const tempPState = cloneDeep(pState);
+    tempPState.player.statuses.fertile.pregnancy.fetus = fType.human;
+    tempPState.player.statuses.fertile.pregnancy.babies = 1;
+    localStorage.setItem("state", JSON.stringify(tempPState));
+    // @ts-ignore
+    const game = new Game(config);
+    game.load();
+    const player = game.player;
 
 
-//     game.sleep(260);
-//   });
+    game.sleep(fType[tempPState.player.statuses.fertile.pregnancy.fetus.type].multiples[tempPState.player.statuses.fertile.pregnancy.babies].duration);
+  });
 });

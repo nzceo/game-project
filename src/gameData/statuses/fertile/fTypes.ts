@@ -1,9 +1,13 @@
-
 export interface FType {
-  type: "Human" | "Orc" | "Goblin";
+  type: "human" | "orc" | "goblin";
   sizeIncrease: number;
   weightIncrease: number;
-  multiplesRate: number;
+  multiples: {
+    [key: number]: {
+      size: number;
+      duration: number;
+    };
+  };
   strength: string;
   movement: string;
   menuText: {
@@ -12,38 +16,72 @@ export interface FType {
   };
 }
 
-
 export const fType: {
   [key: string]: FType;
 } = {
   human: {
-    type: "Human",
-    sizeIncrease: 95,
-    weightIncrease: 95,
+    type: "human",
+    sizeIncrease: 80,
+    weightIncrease: 80,
     // could have up to triplets
-    multiplesRate: 0.9,
+    multiples: {
+      1: {
+        size: 1,
+        duration: 273
+      },
+      2: {
+        size: 0.8,
+        duration: 259
+      },
+      3: {
+        size: 0.7,
+        duration: 245
+      },
+    },
     strength: "normal",
     movement: "normal",
-    menuText: { single: "a human child", multiple: "human children" }
+    menuText: { single: "a human child", multiple: "human children" },
   },
   goblin: {
-    type: "Goblin",
-    sizeIncrease: 60,
-    weightIncrease: 50,
+    type: "goblin",
+    sizeIncrease: 30,
+    weightIncrease: 30,
     // normal is triplets, can go up to quintuplets
-    multiplesRate: 1,
+    multiples: {
+      3: {
+        size: 1,
+        duration: 273
+      },
+      4: {
+        size: 0.9,
+        duration: 259
+      },
+      5: {
+        size: 0.8,
+        duration: 245
+      },
+    },
     strength: "normal",
     movement: "normal",
-    menuText: { single: "a goblin child", multiple: "goblin children" }
+    menuText: { single: "a goblin child", multiple: "goblin children" },
   },
   orc: {
-    type: "Orc",
+    type: "orc",
     sizeIncrease: 130,
     weightIncrease: 200,
     // will never have more than twins
-    multiplesRate: 0.7,
+    multiples: {
+      1: {
+        size: 1,
+        duration: 273
+      },
+      2: {
+        size: 0.8,
+        duration: 273
+      },
+    },
     strength: "high",
     movement: "high",
-    menuText: { single: "an orc child", multiple: "orcish children" }
-  }
+    menuText: { single: "an orc child", multiple: "orcish children" },
+  },
 };

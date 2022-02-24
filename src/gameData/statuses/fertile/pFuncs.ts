@@ -2,6 +2,7 @@ import { pProgression } from "./pProgression";
 import { pMessages } from "./pMessages";
 import { FType } from "./fTypes";
 import Game from "../../game";
+import { IFertilityStatusData } from "./fertile";
 import { isFunction } from "lodash";
 
 function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
@@ -78,7 +79,7 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
         100) *
       (pregnancy.fetus.sizeIncrease *
         pregnancy.babies *
-        (pregnancy.babies > 1 ? pregnancy.fetus.multiplesRate : 1));
+        pregnancy.fetus.multiples[pregnancy.babies].size);
     pregnancy.weight +=
       ((((pProgression[pregnancy.progressWeeks].weight -
         pProgression[pregnancy.progressWeeks - 1].weight) /
@@ -176,16 +177,13 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
 
 export function returnPregnancyProgressMessages(
   game: Game,
-  pregnancy: PregnancyInterface,
+  fertility: IFertilityStatusData,
   seenAlerts: string[]
 ) {
   let messages: any[] = [];
   let filteredAlerts: any[] = [...seenAlerts];
   pMessages.forEach(function (entry) {
-    if (
-      entry.waistStart < parseFloat(pregnancy?.inches!.toFixed(2)) &&
-      entry.waistEnd > parseFloat(pregnancy?.inches!.toFixed(2))
-    ) {
+    if (entry.display(fertility)) {
       let message;
 
       if (isFunction(entry.m)) {
@@ -204,3 +202,10 @@ export function returnPregnancyProgressMessages(
   });
   return { messages, filteredAlerts };
 }
+
+export const waistIsAbove = (
+  fertility: IFertilityStatusData,
+  waist: number
+): boolean => {
+  return waist > parseFloat(fertility.pregnancy?.inches!.toFixed(2));
+};

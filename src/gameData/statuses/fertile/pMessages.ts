@@ -1,18 +1,16 @@
 import Game from "../../game";
-import { calculateAverageSize } from "./pFuncs";
+import { calculateAverageSize, waistIsAbove } from "./pFuncs";
+import { IFertilityStatusData } from "./fertile";
 
 export const pMessages = [
   {
     m: "Your period seems to be late.",
-    waistStart: 1,
-    waistEnd: 3,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 1),
   },
   {
     m: "You're feeling nauseous.",
-    waistStart: 1,
-    waistEnd: 3,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 1),
   },
-  // Around 10 weeks, 29 inches with human
   {
     m: (game: Game) => {
       if (game.player.fertility.isFirstPregnancy()) {
@@ -21,17 +19,20 @@ export const pMessages = [
         return "You still haven't gotten your period and your stomach is starting to swell outwards. You know from experience you're probably pregnant again.";
       }
     },
-    waistStart: 4,
-    waistEnd: 8,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 2),
   },
-  // Around 15 weeks, 33 inches with human
   {
-    m: "Your waist has been thickening for a few weeks now. Despite what you've been trying to convince yourself of, there's no denying it anymore, you're pregnant. What are you going to do now?",
-    waistStart: 7,
-    waistEnd: 11,
-    dontActivate: true,
+    m: "Your waist has been thickening for a few weeks now. As you touch the small roundness that has appeared on your once-flat stomach you finally succumb to what you've been trying to avoid thinking about for so long. You're pregnant, you're not sure when it happened but there's a child growing inside you.",
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 4),
   },
-  // Around 25 weeks, 37 inches with human
+  {
+    m: "Every morning you wake up and your belly looks a bit rounder than the day before. If you wear large enough clothes you can still hide the swell of your tummy, but once your clothes are off you look clearly pregnant. ",
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 5),
+  },
+  {
+    m: "As you put on some clothes and get ready for the day you look down below your engorged breasts. Your belly is now obviously protruting from your body, your womb has expanded exponentially and the skin feels warm but hard when you touch it.",
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 6),
+  },
   {
     m: (game: Game) => {
       const size = calculateAverageSize(
@@ -47,66 +48,79 @@ export const pMessages = [
         }
         return "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. Maybe you should go see a doctor.";
       }
-      return "Your pregnant belly is even bigger than before and sticks out from your body by quite a bit, it's pretty clear to anyone that looks at you that you're expecting.";
+      return [
+        "Like every other day for the past couple of weeks you wake up sore and tired. The more your belly grows and the heavier your womb becomes, the harder it is to find a comfortable position to sleep in. As soon as you're on your feet you realise you can't quite stand normally anymore, the ball jutting out of your midsection is so big it forces you to bend your back, pushing out your belly even further.",
+        "Throughout the day you find yourself resting your hands on the small of your back to give you some respite over carrying your heavy womb wherever you go, but it doesn't do much to improve the constant discomfort.",
+      ];
     },
-    waistStart: 11,
-    waistEnd: 16,
-  },
-  // Around 28 weeks, 42 inches with human
-  {
-    m: (game: Game) => {
-      if (game.player.fertility.isMultiples()) {
-        return "Your stomach is now big enough to be a nuisance during your daily activities. Your womb's weight and size make it difficult to get up when you're sitting and slow down your movements considerably. As you wake up, you feel kicks at opposite sides of your belly, you gasp as you realise there's more than one baby inside you.";
-      }
-      return "Your stomach is now big enough to be a nuisance during your daily activities. Your womb's weight and size make it difficult to get up when you're sitting and slow down your movements considerably, movements from within have also started increasing in frequency it's hard to go a day without feeling a kick or a punch.";
-    },
-    waistStart: 16,
-    waistEnd: 19,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 8),
   },
   {
     m: "A dark line that goes from your pubic area and your belly button seems to have appeared, it divides your pregnant belly in two perfectly.",
-    waistStart: 15,
-    waistEnd: 999,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 7),
   },
   {
     m: "Your belly button has recently popped and become an outie. Touching it feels funny and somewhat arousing.",
-    waistStart: 16,
-    waistEnd: 999,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 8),
   },
-  // Around 34 weeks, 45 inches with human
   {
     m: (game: Game) => {
       if (game.player.fertility.isMultiples()) {
-        return "Your belly is huge, you are surprised that it could've grown so much in such a short amount of time. The babies are getting heavier and heavier by the day and you are really starting to wish you could get this whole thing over with, but you know you're probably not even close to getting them out of you. As you cup your swelling stomach, it's hard to imagine how much further these babies will stretch you before they're ready to come out.";
+        return [
+          "Your stomach is now big enough to be a nuisance during your daily activities. Your womb's weight and size make it difficult to get up when you're sitting and slow down your movements considerably. As you wake up, you feel kicks at opposite sides of your belly, you gasp as you realise there's more than one baby inside you.",
+          "Giving birth to one child is already a lot to think about, but having multiples? You can't even imagine how difficult that's going to be.",
+          "You shudder thinking at how big you're going to be in a couple months time.",
+        ];
       }
-      return "Your belly is huge, you are surprised that it could've grown so much in such a short amount of time. Your baby is getting heavier and heavier by the day and you are really starting to wish you could get this whole thing over with.";
+      return [
+        "Your stomach is now big enough to be a nuisance during your daily activities. Your womb's weight and size make it difficult to get up when you're sitting and slow down your movements considerably, movements from within have also started increasing in frequency it's hard to go a day without feeling a kick or a punch.",
+        "As the weight inside your womb increases you can't quite help yourself from waddling rather than walking.",
+      ];
     },
-    waistStart: 19,
-    waistEnd: 21,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 9),
   },
-  // Around 40 weeks, 48 inches with human
   {
-    m:  "Your belly is so big it's getting really hard for you to actually go about your day. The baby is incredibly active and spends most of his time awake kicking you. Your belly sticks out 10 inches in front of you making you look pretty much full-term, you can't imagine your pregnancy lasting that much longer.",
-    waistStart: 21,
-    waistEnd: 23,
+    m: [
+      "As you try to get out of bed you suddenly realize how difficult moving your heavy body has become. Once you're on your feet, you feel your womb shift downwards and its weight settling deep within your pelvis.",
+      "You place a hand under your burgeoning stomach and try to lift its weight, it relieves you of some of the enormous pressure you're feeling, but it's only temporary.",
+    ],
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 10),
   },
-  // Around 31 weeks, 50 inches with orc
+  {
+    m: (game: Game) => {
+      if (game.player.fertility.isMultiples()) {
+        return [
+          "Your belly is huge, you are surprised that it could've grown so much in such a short amount of time. The babies are getting heavier and heavier by the day and you are really starting to wish you could get this whole thing over with, but you know you're probably not even close to getting them out of you.",
+          "As you cup your swelling stomach, it's hard to imagine how much further these babies will stretch you before they're ready to come out.",
+        ];
+      }
+      return [
+        "Your belly is huge, you're surprised that it could've grown so much in such a short amount of time. Your baby is getting heavier and heavier by the day and you are really starting to wish you could get this whole thing over with.",
+        "Your once flat stomach has been replaced by the round swell of your womb. Not being a local as well as your size and gait attract stares and gazes wherever you go, everyone knows you're not wed and probably don't know the father.",
+      ];
+    },
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 11),
+  },
+  {
+    m: (game: Game) => {
+      return "Your belly is so big it's getting really hard for you to actually go about your day. The baby is incredibly active and spends most of his time awake kicking you. Your belly sticks out 10 inches in front of you making you look pretty much full-term, you can't imagine your pregnancy lasting that much longer.";
+    },
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 12),
+  },
+  // Add one here
+  {
+    m: (game: Game) => {
+      return ["You're huge. Bigger than any pregnant woman you've ever met before. Getting up, sitting down, dressing yourself have all become taxing activities on your swollen frame, each of them needs to be done with extreme carefullness.", ""]
+    },
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 13),
+  },
   {
     m: "Your belly is so big your body is starting to have trouble dealing with its sheer weight and size. Every single movement you do seems awkward and even the smallest tasks are now extremely complicated. By how much your baby is moving you can tell it wants to get out as soon as possible, but you can't help but be a little worried about the birth, can your body handle it?",
-    waistStart: 24,
-    waistEnd: 28,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 15),
   },
-  // Around 37 weeks, 53 inches with orc
   {
     m: "This doesn't feel right, you know you shouldn't be this big. Your belly has grown so big you're having trouble sitting down and sleeping, the weight of it making it hard for you to breathe. You're sore all over and the baby's head is so big between your hips that you've had to resort to walking bow-legged.",
-    waistStart: 28,
-    waistEnd: 29,
-  },
-  // Around 38 weeks, 54 inches with orc
-  {
-    m: "You are now officially overdue. You've been feeling cramps on your lower back and belly for a while now, they come and go irregularly. Your Braxton-Hicks contractions have also become stronger and more frequent.",
-    waistStart: 29,
-    waistEnd: 999,
+    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 16),
   },
 
   // Dexterity penalties

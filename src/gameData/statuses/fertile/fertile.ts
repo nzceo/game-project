@@ -1,8 +1,37 @@
 import Status from "../";
 import { pMessages } from "./pMessages";
 import { returnPregCalc, returnPregnancyProgressMessages } from "./pFuncs";
-import { fType } from "./fTypes";
+import { fType, FType } from "./fTypes";
 import Game from "../../game";
+
+export interface IFertilityStatusData {
+  initialised: boolean;
+  isPregnant: boolean;
+  cycleProgress: number;
+  fertility: number;
+  body: {
+    height: number;
+    weightBase: number;
+    waistBase: number;
+    weight: number;
+    waist: number;
+  };
+  pregnancies: number;
+  births: number;
+  pregnancy: {
+    known: boolean;
+    progressDays: number;
+    progressWeeks: number;
+    publicProgressWeeks: number;
+    babies: number;
+    publicBabies: number;
+    publicFetus: string;
+    fetus: FType;
+    inches: number;
+    weight: number;
+    seenAlerts: string[];
+  };
+}
 
 class Fertile extends Status {
   constructor(game: any, character: any) {
@@ -128,7 +157,7 @@ class Fertile extends Status {
       };
       const progressAlerts = returnPregnancyProgressMessages(
         this.game as Game,
-        this.statusData.pregnancy,
+        this.statusData,
         this.statusData.pregnancy.seenAlerts
       );
       this.statusData = {
@@ -138,10 +167,24 @@ class Fertile extends Status {
         },
       };
       progressAlerts.messages.forEach((alert) => {
-        this.game.extraDisplay.push({ text: alert, type: "flavor" });
+        if (isArray(alert)) {
+          alert.forEach((a) => {
+            this.game.extraDisplay.push({ text: a, type: "flavor" });
+          });
+        } else {
+          this.game.extraDisplay.push({ text: alert, type: "flavor" });
+        }
       });
-      console.log(`at ${this.statusData.pregnancy.progressDays} your belly is ${this.statusData.pregnancy.inches + this.statusData.body.waist }(+${this.statusData.pregnancy.inches})`)
-      // console.log(`at ${this.statusData.pregnancy.progressDays} your weight is ${this.statusData.pregnancy.weight + this.statusData.body.weight }(+${this.statusData.pregnancy.weight})`)
+      console.log(
+        `at ${this.statusData.pregnancy.progressDays} your belly is ${
+          this.statusData.pregnancy.inches + this.statusData.body.waist
+        }(+${this.statusData.pregnancy.inches})`
+      );
+      console.log(
+        `at ${this.statusData.pregnancy.progressDays} your weight is ${
+          this.statusData.pregnancy.weight + this.statusData.body.weight
+        }lb (+${this.statusData.pregnancy.weight}lb)`
+      );
     }
   }
 
