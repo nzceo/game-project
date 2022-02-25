@@ -3,6 +3,7 @@ import { pMessages } from "./pMessages";
 import { FType } from "./fTypes";
 import Game from "../../game";
 import Fertile, { IFertilityStatusData, PregnancyInterface } from "./fertile";
+import { solveCubicBezier } from "./bezier";
 import { isFunction, isArray } from "lodash";
 
 function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
@@ -17,6 +18,32 @@ function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
   }
 }
 
+const returnInchPerGrowthProgression = (
+  progressDays: number,
+  fetusType: any,
+  babies: number
+) => {
+  const relativeProgress = progressDays / fetusType.multiples[babies].duration;
+
+  const curve = fetusType.growthCurve;
+
+  // relative progress mapped to growth curve
+  const growth = solveCubicBezier(
+    0,
+    curve[1],
+    curve[3],
+    1,
+    relativeProgress
+  )[0];
+
+  // Will reach 14ish when progress 1
+  const inchesAtProgress =
+    ((12 * growth) / 105) *
+    // Apply race multipliers and multiples multipliers
+    (fetusType.sizeIncrease * babies * fetusType.multiples[babies].size);
+
+  return inchesAtProgress;
+};
 
 export function returnPregCalc(pregnancy: PregnancyInterface) {
   const days = 1;
@@ -24,100 +51,15 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
   pregnancy.progressWeeks = Math.floor(pregnancy.progressDays / 7);
 
   if (pregnancy.progressWeeks > 0) {
-    pregnancy.inches +=
-      ((((pProgression[pregnancy.progressWeeks].inches -
-        pProgression[pregnancy.progressWeeks - 1].inches) /
-        7) *
-        days) /
-        100) *
-      (pregnancy.fetusType.sizeIncrease *
-        pregnancy.babies *
-        pregnancy.fetusType.multiples[pregnancy.babies].size);
-    pregnancy.weight +=
-      ((((pProgression[pregnancy.progressWeeks].weight -
-        pProgression[pregnancy.progressWeeks - 1].weight) /
-        7) *
-        days) /
-        100) *
-        pregnancy.fetusType.weightIncrease +
-      (2 / 294) * days +
-      (2 / 294) * days +
-      (2 / 294) * days +
-      (2.6 / 294) * days +
-      (2.6 / 294) * days +
-      (1 / 294) * days +
-      (9 / 294) * days;
+    pregnancy.inches += returnInchPerGrowthProgression(
+      pregnancy.progressDays,
+      pregnancy.fetusType,
+      pregnancy.babies
+    );
   }
 
   return pregnancy;
 }
-
-// export function advancePreg(days: number) {
-//   const { player } = playerStore.getState();
-
-//   let pregnancy = { ...player?.pregnancy! };
-//   let seenAlerts = [...player?.pregnancy?.seenAlerts!];
-//   let stats = { ...player?.stats! };
-
-//   let i = 0;
-//   let newMessages: any[] = [];
-//   let passedDays = days;
-//   while (i < days) {
-//     passedDays--;
-//     const newData = returnPregCalc(pregnancy, stats);
-
-//     pregnancy = newData.pregnancy;
-//     stats = newData.stats;
-
-//     // eslint-disable-next-line
-//     newMessages = returnPregnancyMessages(player, pregnancy);
-
-//     if (newMessages.length) break;
-//     i++;
-//   }
-
-//   const flags = playerStore.getState().player?.flags!;
-
-//   console.log(newMessages.map((message) => ({ description: message })));
-
-//   uiStore.setState({
-//     story: [
-//       ...uiStore.getState().story,
-//       ...newMessages.map((message) => ({ description: message })),
-//     ],
-//   });
-
-//   const averageSize = calculateAverageSize(
-//     pregnancy.progressDays,
-//     pregnancy.inches
-//   );
-
-//   const pregTerm = returnPregTerm(pregnancy.progressWeeks);
-
-//   playerStore.setState({
-//     player: {
-//       ...player,
-//       // @ts-ignore
-//       pregnancy: {
-//         ...pregnancy,
-//         seenAlerts: [...seenAlerts, ...newMessages],
-//         known: pregnancy.inches > 8 ? true : false,
-//       },
-//       // @ts-ignore
-//       stats,
-//       flags: {
-//         ...flags,
-//         pregInches: pregnancy.inches!,
-//         fetusType: pregnancy.fetus.type,
-//         averageSize,
-//         pregTerm,
-//       },
-//     } as PlayerState["player"],
-//   });
-
-//   // const armor = calculateArmorFit(bodyState);
-//   // return { pregnancy, stats, bodyState };
-// }
 
 // function calculateArmorFit(bodyState) {
 //   let armor = { ...player.equip.armor };
@@ -176,8 +118,14 @@ export const waistIsAbove = (
 export const sizeMatches = (fertile: Fertile, sizes: string[]) => {
   let currentDay = 0;
   let averageSize = 0;
+  const pregnancy = fertile.statusData.pregnancy;
+  
   while (currentDay <= fertile.statusData.pregnancy.progressDays) {
-    averageSize = pProgression[Math.floor(currentDay / 7)].inches;
+    averageSize = returnInchPerGrowthProgression(
+      pregnancy.progressDays,
+      pregnancy.fetusType,
+      pregnancy.babies
+    );
 
     currentDay++;
   }
@@ -199,7 +147,8 @@ export const sizeMatches = (fertile: Fertile, sizes: string[]) => {
   } else {
     sizeResult = "average";
   }
-  
+
+  console.log(sizeResult, currentInches - averageSize);
 
   return sizes.includes(sizeResult);
 };

@@ -2,6 +2,7 @@ export interface FType {
   type: "human" | "orc" | "goblin";
   sizeIncrease: number;
   weightIncrease: number;
+  growthCurve: number[];
   multiples: {
     [key: number]: {
       size: number;
@@ -16,26 +17,31 @@ export interface FType {
   };
 }
 
+const growthCurves = {
+  standard: [0.5, 0, 0.25, 1],
+};
+
 export const fType: {
   [key: string]: FType;
 } = {
   human: {
     type: "human",
-    sizeIncrease: 80,
-    weightIncrease: 80,
+    sizeIncrease: 0.8,
+    weightIncrease: 0.8,
+    growthCurve: growthCurves.standard,
     // could have up to triplets
     multiples: {
       1: {
         size: 1,
-        duration: 273
+        duration: 273,
       },
       2: {
         size: 0.8,
-        duration: 259
+        duration: 259,
       },
       3: {
         size: 0.7,
-        duration: 245
+        duration: 245,
       },
     },
     strength: "normal",
@@ -44,21 +50,22 @@ export const fType: {
   },
   goblin: {
     type: "goblin",
-    sizeIncrease: 30,
-    weightIncrease: 30,
+    sizeIncrease: .3,
+    weightIncrease: .3,
+    growthCurve: growthCurves.standard,
     // normal is triplets, can go up to quintuplets
     multiples: {
       3: {
         size: 1,
-        duration: 273
+        duration: 273,
       },
       4: {
         size: 0.9,
-        duration: 259
+        duration: 259,
       },
       5: {
         size: 0.8,
-        duration: 245
+        duration: 245,
       },
     },
     strength: "normal",
@@ -67,17 +74,18 @@ export const fType: {
   },
   orc: {
     type: "orc",
-    sizeIncrease: 130,
-    weightIncrease: 200,
+    sizeIncrease: 1.3,
+    weightIncrease: 2,
+    growthCurve: growthCurves.standard,
     // will never have more than twins
     multiples: {
       1: {
         size: 1,
-        duration: 273
+        duration: 273,
       },
       2: {
         size: 0.8,
-        duration: 273
+        duration: 273,
       },
     },
     strength: "high",

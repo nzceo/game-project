@@ -77,6 +77,7 @@ class Fertile extends Status {
           publicBabies: 0,
           publicFetus: "",
           fetus: {},
+          fetuses: [],
           inches: 0,
           weight: 0,
           seenAlerts: [],

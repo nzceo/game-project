@@ -2,7 +2,7 @@ import Fertile from "./";
 import Game from "../../game";
 import { config } from "../../../config";
 import { cloneDeep } from "lodash";
-import {fType} from './fTypes'
+import { fType } from "./fTypes";
 
 const pState = {
   player: {
@@ -168,7 +168,7 @@ describe("preg tests", () => {
       ])
     );
   });
-  it("different progression alert if child is larger", () => {
+  it.only("different progression alert if child is larger", () => {
     const tempPState = cloneDeep(pState);
     tempPState.player.statuses.fertile.pregnancy.fetusType = fType.orc;
     tempPState.player.statuses.fertile.pregnancy.babies = 1;
@@ -224,7 +224,9 @@ describe("preg tests", () => {
 //     game.load();
 //     const player = game.player;
 
-
-//     game.sleep(fType[tempPState.player.statuses.fertile.pregnancy.fetusType.type].multiples[tempPState.player.statuses.fertile.pregnancy.babies].duration);
+//     game.sleep(
+//       fType[tempPState.player.statuses.fertile.pregnancy.fetusType.type]
+//         .multiples[tempPState.player.statuses.fertile.pregnancy.babies].duration
+//     );
 //   });
 });
