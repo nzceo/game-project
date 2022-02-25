@@ -27,17 +27,7 @@ const pState = {
           babies: 1,
           publicBabies: 0,
           publicFetus: "",
-          fetus: {
-            type: "Human",
-            sizeIncrease: 100,
-            weightIncrease: 100,
-            strength: "normal",
-            movement: "normal",
-            menuText: {
-              single: "a human child",
-              multiple: "human children",
-            },
-          },
+          fetusType: fType.human,
           inches: 0,
           weight: 0,
           seenAlerts: [],
@@ -180,7 +170,7 @@ describe("preg tests", () => {
   });
   it("different progression alert if child is larger", () => {
     const tempPState = cloneDeep(pState);
-    tempPState.player.statuses.fertile.pregnancy.fetus = fType.orc;
+    tempPState.player.statuses.fertile.pregnancy.fetusType = fType.orc;
     tempPState.player.statuses.fertile.pregnancy.babies = 1;
     localStorage.setItem("state", JSON.stringify(tempPState));
     // @ts-ignore
@@ -203,7 +193,7 @@ describe("preg tests", () => {
   });
   it("different progression alert if child is larger and multiples", () => {
     const tempPState = cloneDeep(pState);
-    tempPState.player.statuses.fertile.pregnancy.fetus = fType.orc;
+    tempPState.player.statuses.fertile.pregnancy.fetusType = fType.orc;
     tempPState.player.statuses.fertile.pregnancy.babies = 2;
     localStorage.setItem("state", JSON.stringify(tempPState));
     // @ts-ignore
@@ -224,17 +214,17 @@ describe("preg tests", () => {
       ])
     );
   });
-  it.only("test", () => {
-    const tempPState = cloneDeep(pState);
-    tempPState.player.statuses.fertile.pregnancy.fetus = fType.human;
-    tempPState.player.statuses.fertile.pregnancy.babies = 1;
-    localStorage.setItem("state", JSON.stringify(tempPState));
-    // @ts-ignore
-    const game = new Game(config);
-    game.load();
-    const player = game.player;
+//   it("test", () => {
+//     const tempPState = cloneDeep(pState);
+//     tempPState.player.statuses.fertile.pregnancy.fetusType = fType.human;
+//     tempPState.player.statuses.fertile.pregnancy.babies = 1;
+//     localStorage.setItem("state", JSON.stringify(tempPState));
+//     // @ts-ignore
+//     const game = new Game(config);
+//     game.load();
+//     const player = game.player;
 
 
-    game.sleep(fType[tempPState.player.statuses.fertile.pregnancy.fetus.type].multiples[tempPState.player.statuses.fertile.pregnancy.babies].duration);
-  });
+//     game.sleep(fType[tempPState.player.statuses.fertile.pregnancy.fetusType.type].multiples[tempPState.player.statuses.fertile.pregnancy.babies].duration);
+//   });
 });

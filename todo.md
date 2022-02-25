@@ -1,3 +1,5 @@
 - Add flavor text if sleeping consecutively. 
 - Make status affect stats for player
 - height modifier should play a role in inches gained
+- Add dialog for non-human pregnancy
+- Calculate each fetus growth separately

@@ -1,15 +1,15 @@
 import Game from "../../game";
-import { calculateAverageSize, waistIsAbove } from "./pFuncs";
-import { IFertilityStatusData } from "./fertile";
+import { waistIsAbove, sizeMatches } from "./pFuncs";
+import Fertile, { IFertilityStatusData } from "./fertile";
 
 export const pMessages = [
   {
     m: "Your period seems to be late.",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 1),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 1),
   },
   {
     m: "You're feeling nauseous.",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 1),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 1),
   },
   {
     m: (game: Game) => {
@@ -19,49 +19,48 @@ export const pMessages = [
         return "You still haven't gotten your period and your stomach is starting to swell outwards. You know from experience you're probably pregnant again.";
       }
     },
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 2),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 2),
   },
   {
     m: "Your waist has been thickening for a few weeks now. As you touch the small roundness that has appeared on your once-flat stomach you finally succumb to what you've been trying to avoid thinking about for so long. You're pregnant, you're not sure when it happened but there's a child growing inside you.",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 4),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 4),
   },
   {
     m: "Every morning you wake up and your belly looks a bit rounder than the day before. If you wear large enough clothes you can still hide the swell of your tummy, but once your clothes are off you look clearly pregnant. ",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 5),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 5),
   },
   {
     m: "As you put on some clothes and get ready for the day you look down below your engorged breasts. Your belly is now obviously protruting from your body, your womb has expanded exponentially and the skin feels warm but hard when you touch it.",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 6),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 6),
   },
   {
     m: (game: Game) => {
-      const size = calculateAverageSize(
-        game.player.fertility.statusData.pregnancy.progressDays,
-        game.player.fertility.statusData.pregnancy.inches
-      );
-      if (size === "large" || size === "veryLarge") {
-        if (
-          game.player.fertility.isMultiples() &&
-          !game.player.fertility.isKnownMultiples()
-        ) {
-          return "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. You're not completely sure but you think you can feel more movement than a single baby should be capable of.";
-        }
-        return "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. Maybe you should go see a doctor.";
-      }
       return [
         "Like every other day for the past couple of weeks you wake up sore and tired. The more your belly grows and the heavier your womb becomes, the harder it is to find a comfortable position to sleep in. As soon as you're on your feet you realise you can't quite stand normally anymore, the ball jutting out of your midsection is so big it forces you to bend your back, pushing out your belly even further.",
         "Throughout the day you find yourself resting your hands on the small of your back to give you some respite over carrying your heavy womb wherever you go, but it doesn't do much to improve the constant discomfort.",
       ];
     },
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 8),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 8),
+  },
+  {
+    m: (game: Game) => {
+      if (
+        game.player.fertility.isMultiples() &&
+        !game.player.fertility.isKnownMultiples()
+      ) {
+        return "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. You're not completely sure but you think you can feel more movement than a single baby should be capable of.";
+      }
+      return "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. Maybe you should go see a doctor.";
+    },
+    display: (fertile: Fertile) => sizeMatches(fertile, ["large", "veryLarge"]),
   },
   {
     m: "A dark line that goes from your pubic area and your belly button seems to have appeared, it divides your pregnant belly in two perfectly.",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 7),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 7),
   },
   {
     m: "Your belly button has recently popped and become an outie. Touching it feels funny and somewhat arousing.",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 8),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 8),
   },
   {
     m: (game: Game) => {
@@ -77,14 +76,14 @@ export const pMessages = [
         "As the weight inside your womb increases you can't quite help yourself from waddling rather than walking.",
       ];
     },
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 9),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 9),
   },
   {
     m: [
       "As you try to get out of bed you suddenly realize how difficult moving your heavy body has become. Once you're on your feet, you feel your womb shift downwards and its weight settling deep within your pelvis.",
       "You place a hand under your burgeoning stomach and try to lift its weight, it relieves you of some of the enormous pressure you're feeling, but it's only temporary.",
     ],
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 10),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 10),
   },
   {
     m: (game: Game) => {
@@ -99,28 +98,34 @@ export const pMessages = [
         "Your once flat stomach has been replaced by the round swell of your womb. Not being a local as well as your size and gait attract stares and gazes wherever you go, everyone knows you're not wed and probably don't know the father.",
       ];
     },
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 11),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 11),
   },
   {
     m: (game: Game) => {
+      if (game.player.fertility.isMultiples()) {
+        return "Your belly is so big it's getting really hard for you to actually go about your day. The babies are very active and spend most of their time awake kicking you. Your belly sticks out 10 inches in front of you making you look pretty much full-term, you can't imagine your pregnancy lasting that much longer.";
+      }
       return "Your belly is so big it's getting really hard for you to actually go about your day. The baby is incredibly active and spends most of his time awake kicking you. Your belly sticks out 10 inches in front of you making you look pretty much full-term, you can't imagine your pregnancy lasting that much longer.";
     },
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 12),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 12),
   },
   // Add one here
   {
     m: (game: Game) => {
-      return ["You're huge. Bigger than any pregnant woman you've ever met before. Getting up, sitting down, dressing yourself have all become taxing activities on your swollen frame, each of them needs to be done with extreme carefullness.", ""]
+      return [
+        "You're huge. Bigger than any pregnant woman you've ever met before. Getting up, sitting down, dressing yourself have all become taxing activities on your swollen frame, each of them needs to be done with extreme carefullness.",
+        "When standing up, the weight in your womb is settled low between your legs, causing you to swing your belly left and right with each step.",
+      ];
     },
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 13),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 13),
   },
   {
     m: "Your belly is so big your body is starting to have trouble dealing with its sheer weight and size. Every single movement you do seems awkward and even the smallest tasks are now extremely complicated. By how much your baby is moving you can tell it wants to get out as soon as possible, but you can't help but be a little worried about the birth, can your body handle it?",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 15),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 15),
   },
   {
     m: "This doesn't feel right, you know you shouldn't be this big. Your belly has grown so big you're having trouble sitting down and sleeping, the weight of it making it hard for you to breathe. You're sore all over and the baby's head is so big between your hips that you've had to resort to walking bow-legged.",
-    display: (fertility: IFertilityStatusData) => waistIsAbove(fertility, 16),
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 16),
   },
 
   // Dexterity penalties

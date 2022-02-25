@@ -2,8 +2,8 @@ import { pProgression } from "./pProgression";
 import { pMessages } from "./pMessages";
 import { FType } from "./fTypes";
 import Game from "../../game";
-import { IFertilityStatusData } from "./fertile";
-import { isFunction } from "lodash";
+import Fertile, { IFertilityStatusData, PregnancyInterface } from "./fertile";
+import { isFunction, isArray } from "lodash";
 
 function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
   if (weeks < 12) {
@@ -17,53 +17,6 @@ function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
   }
 }
 
-export function calculateAverageSize(
-  progressDays: number,
-  currentInches: number
-): string {
-  let currentDay = 0;
-  let averageSize = 0;
-  while (currentDay <= progressDays) {
-    averageSize = pProgression[Math.floor(currentDay / 7)].inches;
-
-    currentDay++;
-  }
-
-  let sizeResult;
-  if (currentInches - averageSize >= 5) {
-    sizeResult = "large";
-  } else if (currentInches - averageSize > 10) {
-    sizeResult = "veryLarge";
-  } else if (
-    currentInches - averageSize < 5 &&
-    currentInches - averageSize >= 0
-  ) {
-    sizeResult = "average";
-  } else if (currentInches - averageSize < 0) {
-    sizeResult = "small";
-  } else {
-    sizeResult = "average";
-  }
-
-  // console.log(
-  //   `Average size for ${currentDay} days is ${averageSize} inches. You are ${currentInches}, which classes you as ${sizeResult}`
-  // );
-
-  return sizeResult;
-}
-
-export interface PregnancyInterface {
-  known: boolean;
-  progressDays: number;
-  progressWeeks: number;
-  publicProgressWeeks: number;
-  babies: number;
-  publicBabies: number;
-  publicFetus: string;
-  fetus: FType;
-  inches: number;
-  weight: number;
-}
 
 export function returnPregCalc(pregnancy: PregnancyInterface) {
   const days = 1;
@@ -77,16 +30,16 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
         7) *
         days) /
         100) *
-      (pregnancy.fetus.sizeIncrease *
+      (pregnancy.fetusType.sizeIncrease *
         pregnancy.babies *
-        pregnancy.fetus.multiples[pregnancy.babies].size);
+        pregnancy.fetusType.multiples[pregnancy.babies].size);
     pregnancy.weight +=
       ((((pProgression[pregnancy.progressWeeks].weight -
         pProgression[pregnancy.progressWeeks - 1].weight) /
         7) *
         days) /
         100) *
-        pregnancy.fetus.weightIncrease +
+        pregnancy.fetusType.weightIncrease +
       (2 / 294) * days +
       (2 / 294) * days +
       (2 / 294) * days +
@@ -177,27 +130,37 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
 
 export function returnPregnancyProgressMessages(
   game: Game,
-  fertility: IFertilityStatusData,
+  fertile: Fertile,
   seenAlerts: string[]
 ) {
   let messages: any[] = [];
   let filteredAlerts: any[] = [...seenAlerts];
   pMessages.forEach(function (entry) {
-    if (entry.display(fertility)) {
-      let message;
+    if (entry.display(fertile)) {
+      let entryOutput;
 
       if (isFunction(entry.m)) {
-        message = entry.m(game);
+        entryOutput = entry.m(game);
       } else {
-        message = entry.m;
+        entryOutput = entry.m;
       }
 
-      const isAlreadySeen = seenAlerts?.includes(message);
+      let entryMessages: string[] = [];
 
-      if (!isAlreadySeen) {
-        messages.push(message);
-        filteredAlerts.push(message);
+      if (!isArray(entryOutput)) {
+        entryMessages = [entryOutput];
+      } else {
+        entryMessages = entryOutput;
       }
+
+      entryMessages.forEach((message) => {
+        const isAlreadySeen = seenAlerts?.includes(message);
+
+        if (!isAlreadySeen) {
+          messages.push(message);
+          filteredAlerts.push(message);
+        }
+      });
     }
   });
   return { messages, filteredAlerts };
@@ -208,4 +171,35 @@ export const waistIsAbove = (
   waist: number
 ): boolean => {
   return waist > parseFloat(fertility.pregnancy?.inches!.toFixed(2));
+};
+
+export const sizeMatches = (fertile: Fertile, sizes: string[]) => {
+  let currentDay = 0;
+  let averageSize = 0;
+  while (currentDay <= fertile.statusData.pregnancy.progressDays) {
+    averageSize = pProgression[Math.floor(currentDay / 7)].inches;
+
+    currentDay++;
+  }
+
+  const currentInches = fertile.statusData.pregnancy.inches;
+
+  let sizeResult;
+  if (currentInches - averageSize >= 3) {
+    sizeResult = "large";
+  } else if (currentInches - averageSize > 5) {
+    sizeResult = "veryLarge";
+  } else if (
+    currentInches - averageSize < 5 &&
+    currentInches - averageSize >= 0
+  ) {
+    sizeResult = "average";
+  } else if (currentInches - averageSize < 0) {
+    sizeResult = "small";
+  } else {
+    sizeResult = "average";
+  }
+  
+
+  return sizes.includes(sizeResult);
 };

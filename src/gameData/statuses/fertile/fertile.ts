@@ -2,6 +2,7 @@ import Status from "../";
 import { pMessages } from "./pMessages";
 import { returnPregCalc, returnPregnancyProgressMessages } from "./pFuncs";
 import { fType, FType } from "./fTypes";
+import { isArray } from "lodash";
 import Game from "../../game";
 
 export interface IFertilityStatusData {
@@ -18,19 +19,21 @@ export interface IFertilityStatusData {
   };
   pregnancies: number;
   births: number;
-  pregnancy: {
-    known: boolean;
-    progressDays: number;
-    progressWeeks: number;
-    publicProgressWeeks: number;
-    babies: number;
-    publicBabies: number;
-    publicFetus: string;
-    fetus: FType;
-    inches: number;
-    weight: number;
-    seenAlerts: string[];
-  };
+  pregnancy: PregnancyInterface;
+}
+
+export interface PregnancyInterface {
+  known: boolean;
+  progressDays: number;
+  progressWeeks: number;
+  publicProgressWeeks: number;
+  babies: number;
+  publicBabies: number;
+  publicFetus: string;
+  fetusType: FType;
+  inches: number;
+  weight: number;
+  seenAlerts: string[];
 }
 
 class Fertile extends Status {
@@ -157,7 +160,7 @@ class Fertile extends Status {
       };
       const progressAlerts = returnPregnancyProgressMessages(
         this.game as Game,
-        this.statusData,
+        this,
         this.statusData.pregnancy.seenAlerts
       );
       this.statusData = {
@@ -175,16 +178,16 @@ class Fertile extends Status {
           this.game.extraDisplay.push({ text: alert, type: "flavor" });
         }
       });
-      console.log(
-        `at ${this.statusData.pregnancy.progressDays} your belly is ${
-          this.statusData.pregnancy.inches + this.statusData.body.waist
-        }(+${this.statusData.pregnancy.inches})`
-      );
-      console.log(
-        `at ${this.statusData.pregnancy.progressDays} your weight is ${
-          this.statusData.pregnancy.weight + this.statusData.body.weight
-        }lb (+${this.statusData.pregnancy.weight}lb)`
-      );
+      // console.log(
+      //   `at ${this.statusData.pregnancy.progressDays} your belly is ${
+      //     this.statusData.pregnancy.inches + this.statusData.body.waist
+      //   }(+${this.statusData.pregnancy.inches})`
+      // );
+      // console.log(
+      //   `at ${this.statusData.pregnancy.progressDays} your weight is ${
+      //     this.statusData.pregnancy.weight + this.statusData.body.weight
+      //   }lb (+${this.statusData.pregnancy.weight}lb)`
+      // );
     }
   }
 
@@ -197,7 +200,7 @@ class Fertile extends Status {
   }
 
   get fetusType() {
-    return this.statusData.pregnancy.fetus.type;
+    return this.statusData.pregnancy.fetusType.type;
   }
 
   /**
