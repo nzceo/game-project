@@ -5,24 +5,30 @@ import Fertile, { IFertilityStatusData } from "./fertile";
 export const pMessages = [
   {
     m: "Your period seems to be late.",
-    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 1),
+    display: (fertile: Fertile) =>
+      fertile.statusData.pregnancy.progressDays > 28,
   },
   {
     m: "You're feeling nauseous.",
-    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 1),
+    display: (fertile: Fertile) =>
+      fertile.statusData.pregnancy.progressDays > 42,
   },
   {
     m: (game: Game) => {
       if (game.player.fertility.isFirstPregnancy()) {
         return "You seem to be gaining some weight, you have a slight pot belly. You decide not to pay too much attention to it.";
       } else {
+        game.player.fertility.setPregnancyKnown();
         return "You still haven't gotten your period and your stomach is starting to swell outwards. You know from experience you're probably pregnant again.";
       }
     },
     display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 2),
   },
   {
-    m: "Your waist has been thickening for a few weeks now. As you touch the small roundness that has appeared on your once-flat stomach you finally succumb to what you've been trying to avoid thinking about for so long. You're pregnant, you're not sure when it happened but there's a child growing inside you.",
+    m: (game: Game) => {
+      game.player.fertility.setPregnancyKnown();
+      return "Your waist has been thickening for a few weeks now. As you touch the small roundness that has appeared on your once-flat stomach you finally succumb to what you've been trying to avoid thinking about for so long. You're pregnant, you're not sure when it happened but there's a child growing inside you.";
+    },
     display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 4),
   },
   {
@@ -35,15 +41,6 @@ export const pMessages = [
   },
   {
     m: (game: Game) => {
-      return [
-        "Like every other day for the past couple of weeks you wake up sore and tired. The more your belly grows and the heavier your womb becomes, the harder it is to find a comfortable position to sleep in. As soon as you're on your feet you realise you can't quite stand normally anymore, the ball jutting out of your midsection is so big it forces you to bend your back, pushing out your belly even further.",
-        "Throughout the day you find yourself resting your hands on the small of your back to give you some respite over carrying your heavy womb wherever you go, but it doesn't do much to improve the constant discomfort.",
-      ];
-    },
-    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 8),
-  },
-  {
-    m: (game: Game) => {
       if (
         game.player.fertility.isMultiples() &&
         !game.player.fertility.isKnownMultiples()
@@ -52,7 +49,18 @@ export const pMessages = [
       }
       return "Your pregnant belly has grown quite a lot. A bit too fast even. You don't remember anyone from the village getting as big as you so quickly. Maybe you should go see a doctor.";
     },
-    display: (fertile: Fertile) => sizeMatches(fertile, ["large", "veryLarge"]),
+    display: (fertile: Fertile) =>
+      waistIsAbove(fertile.statusData, 7) &&
+      sizeMatches(fertile, ["large", "veryLarge"]),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        "Like every other day for the past couple of weeks you wake up sore and tired. The more your belly grows and the heavier your womb becomes, the harder it is to find a comfortable position to sleep in. As soon as you're on your feet you realise you can't quite stand normally anymore, the ball jutting out of your midsection is so big it forces you to bend your back, pushing out your belly even further.",
+        "Throughout the day you find yourself resting your hands on the small of your back to give you some respite over carrying your heavy womb wherever you go, but it doesn't do much to improve the constant discomfort.",
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 8),
   },
   {
     m: "A dark line that goes from your pubic area and your belly button seems to have appeared, it divides your pregnant belly in two perfectly.",
@@ -109,7 +117,6 @@ export const pMessages = [
     },
     display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 12),
   },
-  // Add one here
   {
     m: (game: Game) => {
       return [
@@ -118,6 +125,15 @@ export const pMessages = [
       ];
     },
     display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 13),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        "You're huge. Bigger than any pregnant woman you've ever met before. Getting up, sitting down, dressing yourself have all become taxing activities on your swollen frame, each of them needs to be done with extreme carefullness.",
+        "When standing up, the weight in your womb is settled low between your legs, causing you to swing your belly left and right with each step.",
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 14),
   },
   {
     m: "Your belly is so big your body is starting to have trouble dealing with its sheer weight and size. Every single movement you do seems awkward and even the smallest tasks are now extremely complicated. By how much your baby is moving you can tell it wants to get out as soon as possible, but you can't help but be a little worried about the birth, can your body handle it?",

@@ -1,11 +1,12 @@
 import RPG from "create-rpg";
-import Player from '../player'
+import Player from "../player";
+import render from "../render";
 
 const { Game } = RPG;
 
 class ExtendedGame extends Game {
   day: number = 0;
-  
+
   declare playerData?: Player;
 
   get player(): Player {
@@ -25,7 +26,6 @@ class ExtendedGame extends Game {
   init() {
     this.playerData = new Player(this);
   }
-
 }
 
 export default ExtendedGame;

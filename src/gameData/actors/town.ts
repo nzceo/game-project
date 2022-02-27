@@ -1,5 +1,6 @@
-import archetypes from '../archetypes'
-import stats from '../stats'
+import archetypes from "../archetypes";
+import stats from "../stats";
+import Game from "../game";
 
 const actors = [
   {
@@ -93,6 +94,61 @@ const actors = [
       //   },
       //   next: "initial_question",
       // },
+      { id: "convo_end" },
+    ],
+  },
+  {
+    id: "sleep",
+    name: "Sleep",
+    description: archetypes.normalMan,
+    combat: stats.weak,
+    dialog: [
+      {
+        id: "sleep",
+        type: "question",
+        message: "How long do you want to sleep for?",
+        options: [
+          {
+            action: "7 days",
+            message: "",
+            next: "sleep_7",
+          },
+          {
+            action: "28 days",
+            message: "",
+            next: "sleep_28",
+          },
+        ],
+      },
+      {
+        id: "sleep_7",
+        type: "message",
+        message: "You sleep for a week.",
+        func: (game: Game) => game.sleep(7),
+        next: "convo_end"
+      },
+      {
+        id: "sleep_28",
+        type: "message",
+        message: "You sleep for a month.",
+        func: (game: Game) => game.sleep(28),
+        next: "convo_end"
+      },
+      { id: "convo_end" },
+    ],
+  },
+  {
+    id: "preg",
+    name: "make pregnant",
+    description: archetypes.normalMan,
+    combat: stats.weak,
+    dialog: [
+      {
+        id: "make",
+        type: "message",
+        message: "You're now pregnant",
+        func: (game: Game) => game.player.fertility.debugPregnancy(),
+      },
       { id: "convo_end" },
     ],
   },

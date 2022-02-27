@@ -8,14 +8,16 @@ import armors from "./gameData/armors";
 import player from "./gameData/player";
 import fertile from "./gameData/statuses/fertile";
 import Status from "./gameData/statuses";
+import render from './gameData/render'
 
-const { Actor, Character, Map, Quest } = RPG;
+const { Character, Quest, Actor, Map } = RPG;
 
 export const config = {
   maps: [...townMaps],
   defaultMap: townMaps[0],
   defaultWeapon: weapons.unarmed,
   defaultArmor: armors.clothes,
+  render,
   player: {
     name: "Hero",
     dialogRef: "",

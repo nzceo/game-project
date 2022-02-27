@@ -1,6 +1,10 @@
 import Status from "../";
 import { pMessages } from "./pMessages";
-import { returnPregCalc, returnPregnancyProgressMessages } from "./pFuncs";
+import {
+  returnPregCalc,
+  returnPregnancyProgressMessages,
+  returnPregnancyWeightGain,
+} from "./pFuncs";
 import { fType, FType } from "./fTypes";
 import { isArray } from "lodash";
 import Game from "../../game";
@@ -31,6 +35,10 @@ export interface PregnancyInterface {
   publicBabies: number;
   publicFetus: string;
   fetusType: FType;
+  fetuses: {
+    weight: number;
+    sex: "male" | "female";
+  }[];
   inches: number;
   weight: number;
   seenAlerts: string[];
@@ -76,7 +84,7 @@ class Fertile extends Status {
           babies: 0,
           publicBabies: 0,
           publicFetus: "",
-          fetus: {},
+          fetusType: {},
           fetuses: [],
           inches: 0,
           weight: 0,
@@ -154,8 +162,27 @@ class Fertile extends Status {
     }
   }
 
+  generateFetuses() {
+    if (this.isPregnant() && this.statusData.pregnancy.fetuses.length === 0) {
+      this.statusData = {
+        ...this.statusData,
+        pregnancy: {
+          ...this.statusData.pregnancy,
+          fetuses: Array.from(
+            { length: this.statusData.pregnancy.babies },
+            (_, i) => ({
+              sex: "male",
+              weight: 0,
+            })
+          ),
+        },
+      };
+    }
+  }
+
   progressPregnancy() {
     if (this.isPregnant()) {
+      this.generateFetuses();
       this.statusData = {
         pregnancy: returnPregCalc(this.statusData.pregnancy),
       };
@@ -179,17 +206,32 @@ class Fertile extends Status {
           this.game.extraDisplay.push({ text: alert, type: "flavor" });
         }
       });
-      // console.log(
-      //   `at ${this.statusData.pregnancy.progressDays} your belly is ${
-      //     this.statusData.pregnancy.inches + this.statusData.body.waist
-      //   }(+${this.statusData.pregnancy.inches})`
-      // );
-      // console.log(
-      //   `at ${this.statusData.pregnancy.progressDays} your weight is ${
-      //     this.statusData.pregnancy.weight + this.statusData.body.weight
-      //   }lb (+${this.statusData.pregnancy.weight}lb)`
-      // );
     }
+  }
+
+  get weight() {
+    if (this.isPregnancyKnown()) {
+      const pWeightGain = returnPregnancyWeightGain(
+        this.statusData.pregnancy.progressDays,
+        this.statusData.pregnancy.fetusType,
+        this.statusData.pregnancy.babies
+      );
+
+      const babyWeight = parseFloat(
+        this.statusData.pregnancy.fetuses.reduce(
+          (p: number, c: { weight: number }) => p + c.weight,
+          0
+        )
+      );
+
+      let weightGain = pWeightGain + babyWeight;
+      weightGain = parseFloat(weightGain.toFixed(2));
+
+      return `${this.statusData.body.weight + weightGain}lb${
+        weightGain > 0 ? `(+${weightGain}lb)` : ""
+      }`;
+    }
+    return `${this.statusData.body.weight}lb`;
   }
 
   isPregnant() {
@@ -216,6 +258,57 @@ class Fertile extends Status {
    */
   isKnownMultiples() {
     return this.statusData.pregnancy.publicBabies > 1;
+  }
+
+  /**
+   * Returns true if pregnancy is known
+   */
+  isPregnancyKnown() {
+    return this.statusData.pregnancy.known;
+  }
+
+  setPregnancyKnown() {
+    this.statusData = {
+      ...this.statusData,
+      pregnancy: {
+        ...this.statusData.pregnancy,
+        known: true,
+      },
+    };
+  }
+
+  debugPregnancy() {
+    this.statusData = {
+      initialised: true,
+      isPregnant: true,
+      // start follicular
+      cycleProgress: 5,
+      // out of 100
+      fertility: 20,
+      body: {
+        height: 5.4,
+        weightBase: 138,
+        waistBase: 25,
+        weight: 138,
+        waist: 25,
+      },
+      pregnancies: 0,
+      births: 0,
+      pregnancy: {
+        known: false,
+        progressDays: 0,
+        progressWeeks: 0,
+        publicProgressWeeks: 0,
+        babies: 2,
+        publicBabies: 0,
+        publicFetus: "",
+        fetusType: fType.orc,
+        fetuses: [],
+        inches: 0,
+        weight: 0,
+        seenAlerts: [],
+      },
+    };
   }
 }
 

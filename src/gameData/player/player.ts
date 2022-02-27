@@ -1,9 +1,12 @@
 import RPG from "create-rpg";
-import Fertile from '../statuses/fertile'
+import Fertile from "../statuses/fertile";
+import Game from "../game";
 
 const { Player } = RPG;
 
 class ExtendedPlayer extends Player {
+  declare game: Game;
+
   get skills() {
     const combatSkills = this.getState("combat").skills;
     return {
@@ -22,12 +25,12 @@ class ExtendedPlayer extends Player {
     })[0];
 
     if (!fertilityState) {
-      this.addStatus("fertility");
+      this.addStatus("fertile");
       return this.activeStatuses.filter((status) => {
         return status.type === "fertile";
       })[0] as Fertile;
     }
-    return fertilityState as Fertile; 
+    return fertilityState as Fertile;
   }
 }
 

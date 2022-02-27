@@ -17,7 +17,7 @@ export interface FType {
   };
 }
 
-const growthCurves = {
+export const growthCurves = {
   standard: [0.5, 0, 0.25, 1],
 };
 
@@ -51,7 +51,7 @@ export const fType: {
   goblin: {
     type: "goblin",
     sizeIncrease: .3,
-    weightIncrease: .3,
+    weightIncrease: .4,
     growthCurve: growthCurves.standard,
     // normal is triplets, can go up to quintuplets
     multiples: {
@@ -75,7 +75,7 @@ export const fType: {
   orc: {
     type: "orc",
     sizeIncrease: 1.3,
-    weightIncrease: 2,
+    weightIncrease: 1.2,
     growthCurve: growthCurves.standard,
     // will never have more than twins
     multiples: {
