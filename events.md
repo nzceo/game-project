@@ -1,0 +1,7 @@
+- date someone until preg, then bad stuff when you tell him
+- get arrested, used in prison
+- asked to help at a farm, end up being a breeder
+- work as a waitress, get harassed
+- captured by orcs?
+- drugged and fucked in a slum
+- 
