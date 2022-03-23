@@ -7,6 +7,7 @@ import {
 } from "./pFuncs";
 import { fType, FType } from "./fTypes";
 import { isArray } from "lodash";
+import Roll from "roll";
 import Game from "../../game";
 
 export interface IFertilityStatusData {
@@ -97,6 +98,28 @@ class Fertile extends Status {
   eachDay() {
     this.progressCycle();
     this.progressPregnancy();
+    this.checkForBirth();
+  }
+
+  checkForBirth() {
+    if (this.isPregnant()) {
+      const progressDays = this.statusData.pregnancy.progressDays;
+      const pregnancyDuration = this.statusData.pregnancy.fetusType.duration;
+      if (progressDays > pregnancyDuration - 14) {
+        const roll = new Roll();
+        const chance = roll.roll("1d100").result;
+
+        // A modifier to be added to the roll which increases each day
+        const chanceModifier = progressDays + 14 - pregnancyDuration;
+
+        if (chance + chanceModifier > 100) {
+          // start birth
+        } else if (chance + chanceModifier > 60) {
+          // bad contractions, no birth
+          this.game.extraDisplay.push({ text: a, type: "flavor" });
+        }
+      }
+    }
   }
 
   progressCycle() {

@@ -176,6 +176,17 @@ export const waistIsAbove = (
   return waist < parseFloat(fertility.pregnancy?.inches!.toFixed(2));
 };
 
+export const waistIsBetween = (
+  fertility: IFertilityStatusData,
+  lowerWaist: number,
+  higherWaist: number
+): boolean => {
+  return (
+    parseFloat(fertility.pregnancy?.inches!.toFixed(2)) > lowerWaist &&
+    parseFloat(fertility.pregnancy?.inches!.toFixed(2)) < higherWaist
+  );
+};
+
 export const sizeMatches = (fertile: Fertile, sizes: string[]) => {
   let currentDay = 0;
   let averageSize = 0;

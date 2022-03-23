@@ -204,3 +204,96 @@ export const pMessages = [
   //     statPenalty: "weight",
   //   },
 ];
+
+export const contractionMessages = [
+  {
+    m: [
+      "While getting ready for the day you start feeling a sharp pain developing at the bottom of your spine which slowly travels to the lower curve of your belly. The sharp pain winds you, forcing your to double over loudly inhaling and exhaling.",
+      `"OOOOOOOOoooooooooooooooh..." A guttural moan escapes your lips.`,
+      "After a couple of minutes the pain slowly starts fading and you regain your composure. Your face is pale and beads of sweat trickle down your forehead from the sudden effort. You caress your belly to try and calm down the movement from within, you must not have long to go.",
+    ],
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 10),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        "As you struggle to lift your heavy body to a standing position your womb suddenly contracts harder than you've ever felt it. The pain winds you and you double over, your hands reaching to the undercurve of your massive belly.",
+        "Looking down, you can tell your usually protruding belly has signficantly shrunk because of the contraction, it feels hard as rock to the touch.",
+        `Your hand caresses your womb aimlessly in a vain attempt to stop the contraction and to try to soothe the ${
+          game.player.fertility.isMultiples() ? "children" : "child"
+        } inside as your face goes red from the strong pressure.`,
+        `"GGGGGGGGGGGGGUUUUUUUUUUuuuuuuuuuuuuuuh... uuuuuuuuuuuuuughhhhhhh..." Moans and guttural sounds escape your throat as you breathe through the searing pain.`,
+        `After a lot of breathing in and out the pain starts fading and the muscles in your womb relax. The ${
+          game.player.fertility.isMultiples() ? "children" : "child"
+        } inside takes a couple more minutes to stop its frantic thrashing. As you try to compose yourself you realise you probably don't have long before birth.`,
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 12),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        `Without warning your midsection is gripped by what feels like red-hot iron band wrapping around your womb. The shock of the sudden pain makes your knees go limp and forces you into a deep squat, your legs spread far apart and belly hanging low between them.`,
+        `With your hands on your knees for balance you instinctively bring your chin to your chest. The more your womb contracts the harder the ${
+          game.player.fertility.isMultiples()
+            ? "head of the first baby"
+            : "baby's head"
+        } is forced into your pelvis.`,
+        `"GGGGGGGGGGGGGGgggaaaaaaaaaaaaaaaaaahhhhhhhhhh! WWWWWWWWHOoooooooooooooooooooo... Wwwwwwwwwwhooooooooooooo..." You exhale and inhale through the pain.`,
+        `"OOOOOOOOOOOOOOOOOOOOooooooooooooooooaaaaaaaaaaaaaaaah!!!! PRESSUREEEE!!!" You cry out as the contraction peaks.`,
+        `As the pain starts fading away you regain composure, your face red and clammy from the sudden effort. You lower yourself on all four, before slowly lifting yourself up to a standing position.`,
+        `You're quite worried about the size of the head you felt during the contraction, it was like a coconut being squeezed through a sleeve, just how big ${
+          game.player.fertility.isMultiples()
+            ? "are the children"
+            : "is the child"
+        } inside you?`,
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 12),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        `All of a sudden, with barely any warning, a sudden pain grips your stomach. As your run your hands protectively over your huge, low hanging belly you feel it rise up, taut and hard like a clenched fist as the contraction quickly starts taking over your womb.`,
+        `"HHHHHHhooooooooooooooooo... GGGGGGGGGHHHHHHHHHHOOOOOOOOoooooooooooooooo..." You let out a low hard groan, your face distorted into a grimace.`,
+        `You can feel ${
+          game.player.fertility.isMultiples()
+            ? "on of your children's heads"
+            : "the baby's head"
+        } driving hard into your pelvis as the muscles of your uterus try to squeeze the child into a more suitable position for birth.`,
+        `Just as it came, the contraction slowly subsides leaving you panting.`,
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 12),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        `Out of nowhere the almost constant backache caused by your enourmous protruding abdomen suddenly intensifies as a burning cramping feeling clutches your stomach.`,
+        `“Ooohhh,” you gasp, “OOOOHhhhh!” pressing with your fingertips into your burning and suddenly very tight belly.`,
+        `“OOoooohhh… HHnnnngggh,” you grunt as you fight to ride out the crest of cramping pain clutching at your tummy.`
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 12),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        `Out of nowhere you feel your womb contracting, pain starts from your back and quickly it encircles your entire midsection. You suddenly feel your womb and the ${
+          game.player.fertility.isMultiples() ? "children" : "child"
+        } within being squeezed harder than than ever as the pressure in your uterus increases more and more.`,
+        `You instinctively reach your hands below the swell of your stomach to try and relieve some of the pressure in your pelvis as your body tries to squeeze the ${
+          game.player.fertility.isMultiples() ? "children" : "child"
+        } out, but you quickly realize that it doesn't help much.`,
+        `Instead you end up running the palms of your hands over your rock-hard stomach in the hope of stopping the contraction or calming the ${
+          game.player.fertility.isMultiples() ? "babies" : "baby"
+        } within.`,
+        `As you caress the taut skin of your belly, your contracting womb muscles squeezing down on the ${
+          game.player.fertility.isMultiples() ? "children" : "child"
+        } within you give you an idea of just how big its body is`,
+        `"Oooooooooooooooooofff..." You exhale as the contraction slowly ebbs. `,
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 13),
+  },
+];
