@@ -4,6 +4,7 @@ import {
   returnPregCalc,
   returnPregnancyProgressMessages,
   returnPregnancyWeightGain,
+  returnRandomMessage,
 } from "./pFuncs";
 import { fType, FType } from "./fTypes";
 import { isArray } from "lodash";
@@ -48,7 +49,7 @@ export interface PregnancyInterface {
 class Fertile extends Status {
   contractionMessages: PMessages[];
   pregnancyMessages: PMessages[];
-  
+
   constructor(game: any, character: any) {
     super(game, character, {
       type: "fertile",
@@ -109,7 +110,8 @@ class Fertile extends Status {
   checkForBirth() {
     if (this.isPregnant()) {
       const progressDays = this.statusData.pregnancy.progressDays;
-      const pregnancyDuration = this.statusData.pregnancy.fetusType.duration;
+      const pregnancyDuration =
+        this.statusData.pregnancy.fetusType.multiples[this.babies()].duration;
       if (progressDays > pregnancyDuration - 14) {
         const roll = new Roll();
         const chance = roll.roll("1d100").result;
@@ -120,7 +122,9 @@ class Fertile extends Status {
         if (chance + chanceModifier > 100) {
           // start birth
         } else if (chance + chanceModifier > 60) {
+          this.game.resetDaysToSleep();
           // bad contractions, no birth
+          const a = returnRandomMessage(this.game, this, contractionMessages);
           this.game.extraDisplay.push({ text: a, type: "flavor" });
         }
       }
@@ -286,6 +290,13 @@ class Fertile extends Status {
    */
   isKnownMultiples() {
     return this.statusData.pregnancy.publicBabies > 1;
+  }
+
+  /**
+   * Returns how many fetuses the char is pregnant with
+   */
+  babies() {
+    return this.statusData.pregnancy.babies;
   }
 
   /**

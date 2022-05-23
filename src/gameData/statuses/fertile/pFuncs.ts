@@ -138,10 +138,13 @@ export function returnRandomMessage(
 ) {
   for (let i = 0; i < arrayOfMessages.length; i++) {
     const m = sample(arrayOfMessages);
-    console.log(m)
-    
+    console.log(m);
+
     if (m.display(fertile)) {
-      return m;
+      if (isFunction(m.m)) {
+        return m.m(game);
+      }
+      return m.m;
     }
   }
   return m[0];
