@@ -1,5 +1,5 @@
 import Status from "../";
-import { pMessages } from "./pMessages";
+import { pMessages, contractionMessages } from "./pMessages";
 import {
   returnPregCalc,
   returnPregnancyProgressMessages,
@@ -46,6 +46,9 @@ export interface PregnancyInterface {
 }
 
 class Fertile extends Status {
+  contractionMessages: PMessages[];
+  pregnancyMessages: PMessages[];
+  
   constructor(game: any, character: any) {
     super(game, character, {
       type: "fertile",
@@ -61,6 +64,8 @@ class Fertile extends Status {
    */
   init() {
     if (!this.statusData.initialised) {
+      this.contractionMessages = contractionMessages;
+      this.pregnancyMessages = pMessages;
       this.statusData = {
         initialised: true,
         isPregnant: false,

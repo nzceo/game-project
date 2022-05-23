@@ -1,10 +1,10 @@
 import { pProgression } from "./pProgression";
-import { pMessages } from "./pMessages";
+import { PMessages } from "./pMessages";
 import { FType, growthCurves } from "./fTypes";
 import Game from "../../game";
 import Fertile, { IFertilityStatusData, PregnancyInterface } from "./fertile";
 import { solveCubicBezier } from "./bezier";
-import { isFunction, isArray } from "lodash";
+import { isFunction, isArray, sample } from "lodash";
 
 function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
   if (weeks < 12) {
@@ -131,6 +131,22 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
 //   return armor;
 // }
 
+export function returnRandomMessage(
+  game: Game,
+  fertile: Fertile,
+  arrayOfMessages: PMessages[]
+) {
+  for (let i = 0; i < arrayOfMessages.length; i++) {
+    const m = sample(arrayOfMessages);
+    console.log(m)
+    
+    if (m.display(fertile)) {
+      return m;
+    }
+  }
+  return m[0];
+}
+
 export function returnPregnancyProgressMessages(
   game: Game,
   fertile: Fertile,
@@ -138,7 +154,7 @@ export function returnPregnancyProgressMessages(
 ) {
   let messages: any[] = [];
   let filteredAlerts: any[] = [...seenAlerts];
-  pMessages.forEach(function (entry) {
+  fertile.pregnancyMessages.forEach(function (entry) {
     if (entry.display(fertile)) {
       let entryOutput;
 
