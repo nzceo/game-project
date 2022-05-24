@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import RPG from "create-rpg";
-import { ITurn } from "create-rpg/dist/core/types";
+import RPG from "ts-rpg-framework";
+import { ITurn } from "ts-rpg-framework/dist/core/types";
 import { config } from "../../config";
 import Game from '../../gameData/game'
 

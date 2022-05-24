@@ -1,4 +1,4 @@
-import { IArmor } from "create-rpg/dist/core/types";
+import { IArmor } from "ts-rpg-framework/dist/core/types";
 
 const armors: {
   [name: string]: IArmor;

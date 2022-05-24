@@ -1,4 +1,4 @@
-import RPG from "create-rpg";
+import RPG from "ts-rpg-framework";
 import townMaps from "./gameData/maps/town";
 import levels from "./gameData/levels";
 import stats from "./gameData/stats";

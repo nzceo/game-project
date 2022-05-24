@@ -1,4 +1,4 @@
-import RPG from "create-rpg";
+import RPG from "ts-rpg-framework";
 import Player from "../player";
 import render from "../render";
 

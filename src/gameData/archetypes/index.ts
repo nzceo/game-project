@@ -1,4 +1,4 @@
-import { ICharacter } from "create-rpg/dist/core/types";
+import { ICharacter } from "ts-rpg-framework/dist/core/types";
 
 interface ICharacterArchetype {
   [key: string]: ICharacter["description"];

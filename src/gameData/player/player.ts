@@ -1,4 +1,4 @@
-import RPG from "create-rpg";
+import RPG from "ts-rpg-framework";
 import Fertile from "../statuses/fertile";
 import Game from "../game";
 

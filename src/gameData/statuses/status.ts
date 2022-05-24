@@ -1,4 +1,4 @@
-import RPG from "create-rpg";
+import RPG from "ts-rpg-framework";
 
 const { Status } = RPG;
 

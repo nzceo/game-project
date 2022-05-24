@@ -1,4 +1,4 @@
-import { IWeapon } from "create-rpg/dist/core/types";
+import { IWeapon } from "ts-rpg-framework/dist/core/types";
 
 
 const weapons: {

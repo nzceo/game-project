@@ -1,5 +1,5 @@
 import Game from "../game";
-import { IDialog, ITurn } from "create-rpg/dist/core/types";
+import { IDialog, ITurn } from "ts-rpg-framework/dist/core/types";
 
 /**
  * The game's render function. This will be called every turn.
