@@ -2,7 +2,12 @@ import Game from "../../game";
 import { waistIsAbove, sizeMatches } from "./pFuncs";
 import Fertile, { IFertilityStatusData } from "./fertile";
 
-export const pMessages = [
+export interface PMessages {
+  m: string | string[] | ((game: Game) => string | string[]);
+  display: (fertile: Fertile) => boolean
+}
+
+export const pMessages: PMessages[] = [
   {
     m: "Your period seems to be late.",
     display: (fertile: Fertile) =>
@@ -93,6 +98,7 @@ export const pMessages = [
     ],
     display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 10),
   },
+  // Something about not being able to breathe?
   {
     m: (game: Game) => {
       if (game.player.fertility.isMultiples()) {
@@ -205,7 +211,7 @@ export const pMessages = [
   //   },
 ];
 
-export const contractionMessages = [
+export const contractionMessages: PMessages[] = [
   {
     m: [
       "While getting ready for the day you start feeling a sharp pain developing at the bottom of your spine which slowly travels to the lower curve of your belly. The sharp pain winds you, forcing your to double over loudly inhaling and exhaling.",
@@ -271,7 +277,7 @@ export const contractionMessages = [
       return [
         `Out of nowhere the almost constant backache caused by your enourmous protruding abdomen suddenly intensifies as a burning cramping feeling clutches your stomach.`,
         `“Ooohhh,” you gasp, “OOOOHhhhh!” pressing with your fingertips into your burning and suddenly very tight belly.`,
-        `“OOoooohhh… HHnnnngggh,” you grunt as you fight to ride out the crest of cramping pain clutching at your tummy.`
+        `“OOoooohhh… HHnnnngggh,” you grunt as you fight to ride out the crest of cramping pain clutching at your tummy.`,
       ];
     },
     display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 12),
@@ -290,8 +296,40 @@ export const contractionMessages = [
         } within.`,
         `As you caress the taut skin of your belly, your contracting womb muscles squeezing down on the ${
           game.player.fertility.isMultiples() ? "children" : "child"
-        } within you give you an idea of just how big its body is`,
+        } within you give you an idea of just how big ${
+          game.player.fertility.isMultiples()
+            ? "their bodies are."
+            : "its body is."
+        }`,
         `"Oooooooooooooooooofff..." You exhale as the contraction slowly ebbs. `,
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 13),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        `While you're getting ready for your day you start feeling a dull pain radiating from your straining uterus. Before your can even react and brace yourself, your eyes go wide with shock as the pain ramps up all of a sudden.`,
+        `"A a a a a a g g g h h h h ! ! . . . H h o o o ! . . . H h o o o ! . . ." You cry out, as the agonising band of pain travels across the low swell of your abdomen.`,
+        `You try to take control over the excrutiating contraction that has taken hold of your enormous mound, but you can't do much except let the pain wash over you.`,
+        `Eventually the contraction fades away as quickly as it started. You try to recompose yourself as best as you can from the scare.`,
+      ];
+    },
+    display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 13),
+  },
+  {
+    m: (game: Game) => {
+      return [
+        `Right as you get get up, you feel an all too common heavy shift within your overripe belly as ${
+          game.player.fertility.isMultiples()
+            ? "the babies within you readjust themselves"
+            : "the baby within your readjusts itself"
+        }.`,
+        `You brace yourself as you know the process is usually followed by a lot of movement, however rather than the usual pushing and kicking you're met with a searing band of pain flaring around the widest part of your outstretched tummy.`,
+        `"Oh!" You blurt out in surprise. Your gasp very quickly turns into a low moan. "HHHHHHHHOooooooooooooooooooo..."`,
+        `Holding on for support with one arm, you try your best to massage away the firmness and tension of your overstretched muscular walls to no avail.`,
+        ` "Whooooooooooooooo... Whooooooooooooooo... Whooooooooooooooo..." You loudly blow out air in and out of your mouth to regain a semblance of control over the situation.`,
+        `Much to your surprise this seems to work as the contraction slowly fades.`,
       ];
     },
     display: (fertile: Fertile) => waistIsAbove(fertile.statusData, 13),

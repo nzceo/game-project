@@ -6,6 +6,7 @@ const { Game } = RPG;
 
 class ExtendedGame extends Game {
   day: number = 0;
+  daysToSleep: number = 0;
 
   declare playerData?: Player;
 
@@ -14,13 +15,18 @@ class ExtendedGame extends Game {
   }
 
   sleep(days: number = 1) {
-    for (let i = 0; i < days; i++) {
+    this.daysToSleep = days;
+    for (let i = 0; i < this.daysToSleep; i++) {
       this.day = this.day + 1;
       this.player.activeStatuses.forEach((status) => {
         // @ts-ignore
         status.eachDay();
       });
     }
+  }
+
+  resetDaysToSleep() {
+    this.daysToSleep = 0;
   }
 
   init() {
