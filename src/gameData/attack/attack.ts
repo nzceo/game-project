@@ -1,13 +1,9 @@
-import RPG from "ts-rpg-framework";
-
-const { Character, Game } = RPG;
-
 /**
  * Logic for attacks
  */
 export default (
-  attacker: Character,
-  attackee: Character,
+  attacker: any,
+  attackee: any,
   governingSkill: string,
   // @ts-ignore
   game: Game
