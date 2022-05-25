@@ -10,8 +10,7 @@ import { fType, FType } from "./fTypes";
 import { isArray } from "lodash";
 import Game from "../../game";
 import ExtendedGame from "../../game";
-
-const Roll = require("roll");
+import Roll from "roll";
 
 export interface IFertilityStatusData {
   initialised: boolean;
@@ -118,6 +117,7 @@ class Fertile extends Status {
         this.babies()
       ].duration;
       if (progressDays > pregnancyDuration - 14) {
+        // @ts-ignore
         const roll = new Roll();
         const chance = roll.roll("1d100").result;
 
