@@ -3,6 +3,7 @@
     "./src/**/*"
   ],
   "compilerOptions": {
+    "target": "es5",
     "strict": true,
     "esModuleInterop": true,
     "lib": [

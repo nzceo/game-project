@@ -8,7 +8,7 @@ class ExtendedGame extends Game {
   day: number = 0;
   daysToSleep: number = 0;
 
-  declare playerData?: Player;
+  playerData?: Player;
 
   get player(): Player {
     return this.playerData!;

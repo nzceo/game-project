@@ -5,7 +5,7 @@ import Game from "../game";
 const { Player } = RPG;
 
 class ExtendedPlayer extends Player {
-  declare game: Game;
+  game!: Game;
 
   get skills() {
     const combatSkills = this.getState("combat").skills;
@@ -15,7 +15,7 @@ class ExtendedPlayer extends Player {
       oneHanded: combatSkills.oneHanded,
       ranged: combatSkills.ranged,
       speech: combatSkills.speech,
-      intelligence: combatSkills.intelligence,
+      intelligence: combatSkills.intelligence
     };
   }
 
