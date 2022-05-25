@@ -1,15 +1,17 @@
 import Status from "../";
-import { pMessages, contractionMessages } from "./pMessages";
+import { pMessages, contractionMessages, PMessages } from "./pMessages";
 import {
   returnPregCalc,
   returnPregnancyProgressMessages,
   returnPregnancyWeightGain,
-  returnRandomMessage,
+  returnRandomMessage
 } from "./pFuncs";
 import { fType, FType } from "./fTypes";
 import { isArray } from "lodash";
-import Roll from "roll";
 import Game from "../../game";
+import ExtendedGame from "../../game";
+
+const Roll = require("roll");
 
 export interface IFertilityStatusData {
   initialised: boolean;
@@ -47,14 +49,16 @@ export interface PregnancyInterface {
 }
 
 class Fertile extends Status {
-  contractionMessages: PMessages[];
-  pregnancyMessages: PMessages[];
+  contractionMessages!: PMessages[];
+  pregnancyMessages!: PMessages[];
+
+  declare game: ExtendedGame;
 
   constructor(game: any, character: any) {
     super(game, character, {
       type: "fertile",
       name: "Fertile",
-      explanation: "The explanation",
+      explanation: "The explanation"
     });
 
     this.init();
@@ -64,9 +68,9 @@ class Fertile extends Status {
    * Initialise the status, sets data only if status has never been initialised
    */
   init() {
+    this.contractionMessages = contractionMessages;
+    this.pregnancyMessages = pMessages;
     if (!this.statusData.initialised) {
-      this.contractionMessages = contractionMessages;
-      this.pregnancyMessages = pMessages;
       this.statusData = {
         initialised: true,
         isPregnant: false,
@@ -79,7 +83,7 @@ class Fertile extends Status {
           weightBase: 138,
           waistBase: 25,
           weight: 138,
-          waist: 25,
+          waist: 25
         },
         pregnancies: 0,
         births: 0,
@@ -95,8 +99,8 @@ class Fertile extends Status {
           fetuses: [],
           inches: 0,
           weight: 0,
-          seenAlerts: [],
-        },
+          seenAlerts: []
+        }
       };
     }
   }
@@ -110,8 +114,9 @@ class Fertile extends Status {
   checkForBirth() {
     if (this.isPregnant()) {
       const progressDays = this.statusData.pregnancy.progressDays;
-      const pregnancyDuration =
-        this.statusData.pregnancy.fetusType.multiples[this.babies()].duration;
+      const pregnancyDuration = this.statusData.pregnancy.fetusType.multiples[
+        this.babies()
+      ].duration;
       if (progressDays > pregnancyDuration - 14) {
         const roll = new Roll();
         const chance = roll.roll("1d100").result;
@@ -125,7 +130,7 @@ class Fertile extends Status {
           this.game.resetDaysToSleep();
           // bad contractions, no birth
           const a = returnRandomMessage(this.game, this, contractionMessages);
-          this.game.extraDisplay.push({ text: a, type: "flavor" });
+          // this.game.extraDisplay.push({ text: a, type: "flavor" });
         }
       }
     }
@@ -134,7 +139,7 @@ class Fertile extends Status {
   progressCycle() {
     if (!this.statusData.isPregnant) {
       this.statusData = {
-        cycleProgress: this.statusData.cycleProgress + 1,
+        cycleProgress: this.statusData.cycleProgress + 1
       };
 
       if (
@@ -142,46 +147,46 @@ class Fertile extends Status {
         this.statusData.cycleProgress < 5
       ) {
         this.statusData = {
-          fertility: 0,
+          fertility: 0
         };
       } else if (
         this.statusData.cycleProgress >= 5 &&
         this.statusData.cycleProgress < 11
       ) {
         this.statusData = {
-          fertility: 20,
+          fertility: 20
         };
       } else if (
         this.statusData.cycleProgress >= 11 &&
         this.statusData.cycleProgress < 14
       ) {
         this.statusData = {
-          fertility: 85,
+          fertility: 85
         };
       } else if (
         this.statusData.cycleProgress >= 14 &&
         this.statusData.cycleProgress < 15
       ) {
         this.statusData = {
-          fertility: 75,
+          fertility: 75
         };
       } else if (
         this.statusData.cycleProgress >= 15 &&
         this.statusData.cycleProgress < 18
       ) {
         this.statusData = {
-          fertility: 65,
+          fertility: 65
         };
       } else if (
         this.statusData.cycleProgress >= 18 &&
         this.statusData.cycleProgress < 29
       ) {
         this.statusData = {
-          fertility: 35,
+          fertility: 35
         };
       } else if (this.statusData.cycleProgress >= 29) {
         this.statusData = {
-          cycleProgress: 0,
+          cycleProgress: 0
         };
 
         this.progressCycle();
@@ -189,7 +194,7 @@ class Fertile extends Status {
     } else {
       this.statusData = {
         cycleProgress: 5,
-        fertility: 20,
+        fertility: 20
       };
     }
   }
@@ -204,10 +209,10 @@ class Fertile extends Status {
             { length: this.statusData.pregnancy.babies },
             (_, i) => ({
               sex: "male",
-              weight: 0,
+              weight: 0
             })
-          ),
-        },
+          )
+        }
       };
     }
   }
@@ -216,7 +221,7 @@ class Fertile extends Status {
     if (this.isPregnant()) {
       this.generateFetuses();
       this.statusData = {
-        pregnancy: returnPregCalc(this.statusData.pregnancy),
+        pregnancy: returnPregCalc(this.statusData.pregnancy)
       };
       const progressAlerts = returnPregnancyProgressMessages(
         this.game as Game,
@@ -226,8 +231,8 @@ class Fertile extends Status {
       this.statusData = {
         pregnancy: {
           ...this.statusData.pregnancy,
-          seenAlerts: progressAlerts.filteredAlerts,
-        },
+          seenAlerts: progressAlerts.filteredAlerts
+        }
       };
       progressAlerts.messages.forEach((alert) => {
         if (isArray(alert)) {
@@ -311,8 +316,8 @@ class Fertile extends Status {
       ...this.statusData,
       pregnancy: {
         ...this.statusData.pregnancy,
-        known: true,
-      },
+        known: true
+      }
     };
   }
 
@@ -329,7 +334,7 @@ class Fertile extends Status {
         weightBase: 138,
         waistBase: 25,
         weight: 138,
-        waist: 25,
+        waist: 25
       },
       pregnancies: 0,
       births: 0,
@@ -345,8 +350,8 @@ class Fertile extends Status {
         fetuses: [],
         inches: 0,
         weight: 0,
-        seenAlerts: [],
-      },
+        seenAlerts: []
+      }
     };
   }
 }

@@ -76,8 +76,6 @@ const returnWeightPerGrowthProgression = (
 
   const curve = fetusType.growthCurve;
 
-  fetusType.growthCurve;
-
   // relative progress mapped to growth curve
   const growth = solveCubicBezier(
     0,
@@ -115,7 +113,7 @@ export function returnPregCalc(pregnancy: PregnancyInterface) {
           pregnancy.progressDays,
           pregnancy.fetusType,
           pregnancy.babies
-        ),
+        )
     }));
   }
 
@@ -135,19 +133,18 @@ export function returnRandomMessage(
   game: Game,
   fertile: Fertile,
   arrayOfMessages: PMessages[]
-) {
+): string | string[] {
   for (let i = 0; i < arrayOfMessages.length; i++) {
-    const m = sample(arrayOfMessages);
-    console.log(m);
-
-    if (m.display(fertile)) {
+    const m = sample(arrayOfMessages)!;
+    if (m?.display(fertile)) {
       if (isFunction(m.m)) {
         return m.m(game);
       }
       return m.m;
     }
   }
-  return m[0];
+  // @ts-ignore
+  return arrayOfMessages[0].m;
 }
 
 export function returnPregnancyProgressMessages(

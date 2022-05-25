@@ -1,6 +1,5 @@
 import RPG from "ts-rpg-framework";
 import Player from "../player";
-import render from "../render";
 
 const { Game } = RPG;
 
