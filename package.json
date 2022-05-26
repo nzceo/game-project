@@ -12,6 +12,8 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@babel/plugin-transform-typescript": "7.18.1",
+    "@babel/preset-typescript": "^7.9.0",
     "@types/roll": "1.2.0",
     "lodash": "^4.17.21",
     "react": "^18.0.0",
@@ -21,7 +23,6 @@
     "ts-rpg-framework": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/plugin-transform-typescript": "7.18.1",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/jest": "^27.4.0",
@@ -39,13 +40,23 @@
     "jest": "^27.5.0"
   },
   "babel": {
-    "presets": ["react-app"],
-    "plugins": [
+    "presets": [
+      "react-app",
       [
-        "@babel/plugin-transform-typescript",
+        "@babel/preset-typescript",
         {
           "allowDeclareFields": true
         }
+      ]
+    ],
+    "plugins": [
+      [
+        [
+          "@babel/plugin-transform-typescript",
+          {
+            "allowDeclareFields": true
+          }
+        ]
       ]
     ]
   },
