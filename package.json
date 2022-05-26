@@ -46,7 +46,7 @@
     ],
     "plugins": [
       [
-        "@babel/plugin-transform-typescript",
+        ["@babel/plugin-transform-typescript", { "allowDeclareFields": true }],
         "@babel/plugin-transform-react-jsx",
         {
           "runtime": "automatic"
