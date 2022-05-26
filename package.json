@@ -46,6 +46,7 @@
     ],
     "plugins": [
       [
+        "@babel/plugin-transform-typescript",
         "@babel/plugin-transform-react-jsx",
         {
           "runtime": "automatic"
