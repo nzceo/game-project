@@ -51,7 +51,7 @@ class Fertile extends Status {
   contractionMessages!: PMessages[];
   pregnancyMessages!: PMessages[];
 
-  declare game: ExtendedGame;
+  game: ExtendedGame;
 
   constructor(game: any, character: any) {
     super(game, character, {
