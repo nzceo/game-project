@@ -5,7 +5,7 @@
     "dev": "vite",
     "start:old": "vite",
     "start": "react-scripts start",
-    "build": "tsc && vite build",
+    "build": "react-scripts build",
     "serve": "vite preview",
     "test:dev": "jest --watchAll --no-cache",
     "test": "jest --no-cache",
