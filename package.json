@@ -21,6 +21,7 @@
     "ts-rpg-framework": "^1.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-typescript": "7.18.1",
     "@babel/preset-typescript": "^7.9.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
@@ -42,11 +43,16 @@
     "presets": [
       "@babel/preset-env",
       "@babel/preset-react",
-      ["@babel/preset-typescript", { "allowDeclareFields": true }]
+      "@babel/preset-typescript"
     ],
     "plugins": [
       [
-        ["@babel/plugin-transform-typescript", { "allowDeclareFields": true }],
+        [
+          "@babel/plugin-transform-typescript",
+          {
+            "allowDeclareFields": true
+          }
+        ],
         "@babel/plugin-transform-react-jsx",
         {
           "runtime": "automatic"
