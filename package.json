@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-typescript": "7.18.1",
-    "@babel/preset-typescript": "^7.9.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/jest": "^27.4.0",
@@ -40,24 +39,13 @@
     "jest": "^27.5.0"
   },
   "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react",
-      "@babel/preset-typescript"
-    ],
+    "presets": ["react-app"],
     "plugins": [
       [
-        [
-          "@babel/plugin-transform-typescript",
-          {
-            "allowDeclareFields": true
-          }
-        ],
-        "@babel/plugin-transform-react-jsx",
+        "@babel/plugin-transform-typescript",
         {
-          "runtime": "automatic"
-        },
-        "@babel/plugin-proposal-class-properties"
+          "allowDeclareFields": true
+        }
       ]
     ]
   },
