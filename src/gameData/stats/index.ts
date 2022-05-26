@@ -1,4 +1,4 @@
-export default {
+const stats = {
   weak: {
     hitPoints: { base: 15, current: 15 },
     actionPoints: {
@@ -11,7 +11,9 @@ export default {
       oneHanded: 10,
       ranged: 10,
       speech: 10,
-      intelligence: 10,
+      intelligence: 10
     }
-  },
+  }
 };
+
+export default stats;

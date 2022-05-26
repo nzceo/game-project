@@ -6,7 +6,7 @@ function solveQuadraticEquation(a: any, b: any, c: any) {
   } else {
     return [
       (-b + Math.sqrt(discriminant)) / (2 * a),
-      (-b - Math.sqrt(discriminant)) / (2 * a),
+      (-b - Math.sqrt(discriminant)) / (2 * a)
     ];
   }
 }
@@ -34,7 +34,7 @@ function solveCubicEquation(a: any, b: any, c: any, d: any) {
       return [
         Math.pow(-(q / 2) + Math.sqrt(discriminant), 1 / 3) -
           Math.pow(q / 2 + Math.sqrt(discriminant), 1 / 3) -
-          b / 3,
+          b / 3
       ];
     } else {
       var r = Math.sqrt(Math.pow(-(p / 3), 3));
@@ -45,7 +45,7 @@ function solveCubicEquation(a: any, b: any, c: any, d: any) {
       return [
         s * Math.cos(phi / 3) - b / 3,
         s * Math.cos((phi + 2 * Math.PI) / 3) - b / 3,
-        s * Math.cos((phi + 4 * Math.PI) / 3) - b / 3,
+        s * Math.cos((phi + 4 * Math.PI) / 3) - b / 3
       ];
     }
   }
@@ -67,10 +67,10 @@ export function solveCubicBezier(
   p2 -= x;
   p3 -= x;
 
-  var a = p3 - 3 * p2 + 3 * p1 - p0;
-  var b = 3 * p2 - 6 * p1 + 3 * p0;
-  var c = 3 * p1 - 3 * p0;
-  var d = p0;
+  // var a = p3 - 3 * p2 + 3 * p1 - p0;
+  // var b = 3 * p2 - 6 * p1 + 3 * p0;
+  // var c = 3 * p1 - 3 * p0;
+  // var d = p0;
 
   var roots = solveCubicEquation(
     p3 - 3 * p2 + 3 * p1 - p0,

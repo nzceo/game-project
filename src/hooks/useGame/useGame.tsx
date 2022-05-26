@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import RPG from "ts-rpg-framework";
 import { ITurn } from "ts-rpg-framework/dist/core/types";
 import { config } from "../../config";
-import Game from '../../gameData/game'
+import Game from "../../gameData/game";
 
 const useGame = () => {
   const [gameCounter, setGameCounter] = useState(0);
   const [gameState, setGameState] = useState<ITurn>({
     display: [],
-    options: [],
+    options: []
   });
   const gameRef = React.useRef<any | undefined>();
 
@@ -28,9 +27,9 @@ const useGame = () => {
             gameRef.current!.load();
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
             increaseGameCounter();
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -47,7 +46,7 @@ const useGame = () => {
 
   return {
     gameState,
-    turn: increaseGameCounter,
+    turn: increaseGameCounter
   };
 };
 
