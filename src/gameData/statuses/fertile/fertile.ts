@@ -130,8 +130,13 @@ class Fertile extends Status {
           this.game.resetDaysToSleep();
           // bad contractions, no birth
           const a = returnRandomMessage(this.game, this, contractionMessages);
-          console.log(a);
-          // this.game.extraDisplay.push({ text: a, type: "flavor" });
+          if (isArray(a)) {
+            a.forEach((message) => {
+              this.game.extraDisplay.push({ text: message, type: "flavor" });
+            });
+          } else {
+            this.game.extraDisplay.push({ text: a, type: "flavor" });
+          }
         }
       }
     }
