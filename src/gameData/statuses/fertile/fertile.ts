@@ -51,7 +51,7 @@ class Fertile extends Status {
   contractionMessages!: PMessages[];
   pregnancyMessages!: PMessages[];
 
-  declare game: ExtendedGame;
+  game!: ExtendedGame;
 
   constructor(game: any, character: any) {
     super(game, character, {
@@ -130,6 +130,7 @@ class Fertile extends Status {
           this.game.resetDaysToSleep();
           // bad contractions, no birth
           const a = returnRandomMessage(this.game, this, contractionMessages);
+          console.log(a);
           // this.game.extraDisplay.push({ text: a, type: "flavor" });
         }
       }

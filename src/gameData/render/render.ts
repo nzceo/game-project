@@ -6,7 +6,7 @@ import { IDialog, ITurn } from "ts-rpg-framework/dist/core/types";
  * Add new switches and use the game class to output
  * new things.
  */
-export default (game: Game): ITurn => {
+const render = (game: Game): ITurn => {
   switch (game.player.state) {
     default:
     case "normal":
@@ -17,7 +17,7 @@ export default (game: Game): ITurn => {
       if (game.player.map.actors.length > 0) {
         game.extraDisplay.push({
           text: `You see the following characters:`,
-          type: "flavor",
+          type: "flavor"
         });
         game.player.map.actors.forEach((actor) => {
           actor.describe();
@@ -26,12 +26,12 @@ export default (game: Game): ITurn => {
 
       console.log({
         extraDisplay: game.extraDisplay,
-        state: game.player.state,
+        state: game.player.state
       });
       return {
         display: [
           { text: `You are in ${game.player.map.name}.`, type: "flavor" },
-          ...game.extraDisplay,
+          ...game.extraDisplay
         ],
         options: [
           ...game.player.map.connections.map((connection) => {
@@ -39,7 +39,7 @@ export default (game: Game): ITurn => {
               text: `Go to ${connection.name}`,
               action: () => {
                 connection.travelTo();
-              },
+              }
             };
           }),
           ...game.player.map.actors.map((actor) => {
@@ -47,11 +47,11 @@ export default (game: Game): ITurn => {
               text: `Talk to ${actor.name}`,
               action: () => {
                 actor.talkTo();
-              },
+              }
             };
           }),
-          ...game.extraOptions,
-        ],
+          ...game.extraOptions
+        ]
       };
     case "dialog":
       const currentDialog = game.player.dialog.returnDialog(
@@ -68,7 +68,7 @@ export default (game: Game): ITurn => {
             text: option.action,
             action: () => {
               game.player.dialog.updateDialogRef(option.next);
-            },
+            }
           };
         });
       }
@@ -84,18 +84,16 @@ export default (game: Game): ITurn => {
         options: [
           ...currentOptionsIfAny,
           ...game.extraOptions,
-          ...dialogEndOptions,
-        ],
+          ...dialogEndOptions
+        ]
       };
     case "combat":
       const currentEnemies: ITurn["display"] = game.enemyData.map((enemy) => {
         return {
-          text: `You are fighting ${
-            enemy.name
-          }. ${enemy.returnDescription()} ${enemy.pronoun} has ${
-            enemy.health
-          }HP left.`,
-          type: "flavor",
+          text: `You are fighting ${enemy.name}. ${enemy.returnDescription()} ${
+            enemy.pronoun
+          } has ${enemy.health}HP left.`,
+          type: "flavor"
         };
       });
       const attackOptions = game.enemyData.map((enemy) => {
@@ -103,7 +101,7 @@ export default (game: Game): ITurn => {
           text: `Attack ${enemy.name}`,
           action: () => {
             // enemy.attack(game.player, "oneHanded");
-          },
+          }
         };
       });
       return {
@@ -111,11 +109,11 @@ export default (game: Game): ITurn => {
           ...game.extraDisplay,
           {
             text: `You have ${game.player.health}HP left.`,
-            type: "flavor",
+            type: "flavor"
           },
-          ...currentEnemies,
+          ...currentEnemies
         ],
-        options: [...game.extraOptions, ...attackOptions],
+        options: [...game.extraOptions, ...attackOptions]
       };
     case "gameOver":
       return {
@@ -123,8 +121,8 @@ export default (game: Game): ITurn => {
           ...game.extraDisplay,
           {
             text: `Game Over!`,
-            type: "flavor",
-          },
+            type: "flavor"
+          }
         ],
         options: [
           {
@@ -136,9 +134,11 @@ export default (game: Game): ITurn => {
                 game.player.getState("combat.hitPoints.base")
               );
               game.player.travelTo(game.player.getState("data").checkpointRef);
-            },
-          },
-        ],
+            }
+          }
+        ]
       };
   }
 };
+
+export default render;

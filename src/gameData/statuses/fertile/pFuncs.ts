@@ -1,12 +1,13 @@
-import { pProgression } from "./pProgression";
 import { PMessages } from "./pMessages";
-import { FType, growthCurves } from "./fTypes";
+import { growthCurves } from "./fTypes";
 import Game from "../../game";
 import Fertile, { IFertilityStatusData, PregnancyInterface } from "./fertile";
 import { solveCubicBezier } from "./bezier";
 import { isFunction, isArray, sample } from "lodash";
 
-function returnPregTerm(weeks: number): "first" | "second" | "third" | "late" {
+export function returnPregTerm(
+  weeks: number
+): "first" | "second" | "third" | "late" {
   if (weeks < 12) {
     return "first";
   } else if (weeks >= 12 && weeks < 24) {
